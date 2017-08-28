@@ -1,0 +1,179 @@
+<div id="page-wrapper">
+	<div class="row toggleBtn" ng-click="CommonService.toggleBtn()"><i class="fa fa-angle-left fa-2x"></i></div>
+	<!-- /.row -->
+	<div class="row">
+		<div class="col-lg-12">
+			<!-- /.panel -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-lg-12" ng-hide="isShowAttribute">
+							<button class="btn btn-primary" ng-click="newMemberAttribute()" ng-i18next="icem.add"></button>
+						</div>
+						<div class="col-lg-12" ng-show="isShowAttribute">
+							<div class="modal-header">
+								<button type="button" class="close" ng-click="closeAttribute()">&times;</button>
+								<h3 class="modal-title" ng-i18next="{{newModal.attributeId ? 'icem.edit' : 'icem.add'}}"></h3>
+							</div>
+							<div class="modal-body">
+								<div class="col-lg-12 bottom-expand">
+									<label ng-i18next="icem.memberAttribute.name"></label><span class="label label-danger label-danger-mandatory" ng-i18next="icem.mandatory"></span>
+									<input class="form-control" type="text" ng-model="newModal.name" maxlength="30" />
+								</div>
+								<div class="col-lg-12 bottom-expand">
+									<label ng-i18next="icem.status"></label>
+									<div class="btn-group btn-group">
+										<button class="btn btn-default" ng-model="newModal.status" ng-disabled="newModal.ignoreInRoleSetting" ng-class="{'active':newModal.status === true}"
+											btn-radio="'true'">ON</button>
+										<button class="btn btn-default" ng-model="newModal.status" ng-disabled="newModal.ignoreInRoleSetting" ng-class="{'active':newModal.status === false}"
+											btn-radio="'false'">OFF</button>
+									</div>
+								</div>
+								<div class="col-lg-12 bottom-expand">
+									<label class="checkbox-inline"><input type="checkbox" ng-model="newModal.ignoreInRoleSetting" ng-click="changeStatus(newModal)">{{'icem.memberAttribute.deriveFunc' | i18next}}</label>
+								</div>
+								<!--  member attr use function -->
+								<div ng-hide="!newModal.ignoreInRoleSetting">
+									<div class="col-lg-12 bottom-expand">
+										<label ng-i18next="icem.memberAttribute.func"></label>
+										<select class="form-control" ng-model="newModal.calculationFrequency">
+											  <option value="" >---</option>
+											  <option value="DAILY" ng-i18next="icem.memberAttribute.countDay"></option>
+											  <option value="WEEKLY" ng-i18next="icem.memberAttribute.countWeek"></option>
+											  <option value="MONTHLY" ng-i18next="icem.memberAttribute.countMonth"></option>
+										</select>
+									</div>
+									<div class="col-lg-12 bottom-expand">
+										<label ng-i18next="icem.memberAttribute.target"></label>
+										<select class="form-control" ng-model="newModal.target">
+												<option value="">---</option>
+											   	<option ng-repeat="al in attributeList" value="{{al.name}}" ng-show="al.name != newModal.name">{{al.name}}
+											   	</option>
+										</select>
+									</div>
+								</div>
+								<!--  member attr not use function -->
+								<div class="col-lg-12 bottom-expand" ng-show="!newModal.ignoreInRoleSetting">
+									<fieldset>
+										<button class="btn btn-primary margin5" ng-click="addValue()" ng-i18next="icem.memberAttribute.add.value"></button>
+										<label>{{('icem.row.limit'| i18next) + ': ' +  attributeValueCount + '/' + attributeValueLimit}}</label>
+										<div class="margin5" ng-show="isShow">
+											<input class="form-control" type="text" ng-model="newValue.optionName" maxlength="30" />
+											<button class="btn btn-default margin5" ng-click="cancelNewValue()" ng-i18next="icem.cancel" style="float:right;"></button>
+											<button class="btn btn-primary margin5" ng-click="saveNewValue(newValue)" ng-i18next="icem.ok" style="float:right;"></button>
+										</div>
+										<table class="table table-bordered table-hover">
+											<thead>
+												<tr>
+													<th ng-i18next="icem.memberAttribute.value"></th>
+													<th ng-i18next="icem.status"></th>
+													<th ng-i18next="icem.lastModified"></th>
+													<th ng-i18next="icem.operation"></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr ng-repeat="av in newModal.valueOptions">
+													<td width="25%" ng-if="!av.$$edit">{{av.optionName}}</td>
+													<td width="10%" ng-switch on="av.customAttributeStatus">
+														<sapn ng-switch-when="NEW" ng-i18next="icem.created"></sapn>
+														<sapn ng-switch-when="IN_USE" ng-i18next="icem.edited"></sapn>
+														<sapn ng-switch-when="D" ng-i18next="icem.delete"></sapn>
+														<span ng-if="av.inUse" ng-i18next="icem.inUse" />
+													</td>
+													<td width="10%">
+														<span>{{av.updateAt | date:'yyyy-MM-dd'}}</span>
+													</td>
+													<td width="10%" style="white-space:nowrap;">
+														<button type="button" class="btn btn-primary btn-circle" ng-click="editValue(av)"><i class="fa fa-list"></i></button>
+														<button type="button" class="btn btn-danger btn-circle" ng-click="deleteValue(av)"><i class="fa fa-times"></i></button>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</fieldset>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-primary" click-once input-data1="newModal" input-data2="false" api-method="saveAttribute"
+									ng-i18next="icem.save"></button>
+								<button type="button" class="btn btn-default" ng-click="closeAttribute()" ng-i18next="icem.close"></button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /.panel-heading -->
+				<div class="panel-body">
+					<div class="row">
+						<div class="sk-fading-circle" ng-show="isLoading">
+							<div class="sk-circle1 sk-circle"></div>
+							<div class="sk-circle2 sk-circle"></div>
+							<div class="sk-circle3 sk-circle"></div>
+							<div class="sk-circle4 sk-circle"></div>
+							<div class="sk-circle5 sk-circle"></div>
+							<div class="sk-circle6 sk-circle"></div>
+							<div class="sk-circle7 sk-circle"></div>
+							<div class="sk-circle8 sk-circle"></div>
+							<div class="sk-circle9 sk-circle"></div>
+							<div class="sk-circle10 sk-circle"></div>
+							<div class="sk-circle11 sk-circle"></div>
+							<div class="sk-circle12 sk-circle"></div>
+						</div>
+						<div class="col-lg-12" ng-hide="isLoading">
+							<label>{{('icem.row.limit'| i18next) + ': ' +  attributeCount + '/' + attributeLimit}}</label>
+							<div class="table-responsive">
+								<table ng-table="memberAttritubeTableParams" class="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th></th>
+											<th ng-i18next="icem.memberAttribute.name"></th>
+											<!--<th ng-i18next="icem.memberAttribute.funcStatus"></th>-->
+											<th ng-i18next="icem.status"></th>
+											<th ng-i18next="icem.operation"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="x in $data">
+											<td width="5%" ng-if="!x.$$edit">
+												<span ng-if="x.status">{{'report.chart.on' | i18next}}</span>
+												<span ng-if="!x.status">{{'report.chart.off' | i18next}}</span>
+											</td>
+											<td width="5%" ng-if="x.$$edit">
+												<input type="checkbox" ng-model="x.status" />
+											</td>
+											<td width="10%" ng-if="!x.$$edit">
+												<span>{{x.name}}</span>
+											</td>
+											<td width="10%" ng-if="x.$$edit">
+												<input class="form-control" type="text" ng-model="x.name" maxlength="30" />
+											</td>
+											<td width="10%">
+												<span>{{(x.inUse ? "icem.inUse" : "icem.notInUse" ) | i18next}}</span>
+											</td>
+											<td width="10%" style="white-space:nowrap;">
+												<button type="button" ng-if="!x.$$edit" class="btn btn-primary btn-circle" ng-click="editMemberAttribute(x)"><i class="fa fa-list"></i></button>
+												<button type="button" ng-if="!x.$$edit && !x.inUse" class="btn btn-danger btn-circle" ng-click="deleteAttribute(x)"><i class="fa fa-times"></i></button>
+												<button type="button" ng-if="!x.$$edit && !x.ignoreInRoleSetting" ng-click="inLineEditAttr(x)" popover="{{'icem.memberAttribute.editStatus' | i18next}}"
+													popover-trigger="mouseenter" popover-placement="top" class="btn btn-info btn-circle">
+														<i class="fa fa-cubes"></i>
+													</button>
+												<button ng-if="x.$$edit" type="button" class="btn btn-success btn-circle" click-once input-data1="x" input-data2="true" api-method="saveAttribute"><i class="fa fa-check"></i></button>
+												<button ng-if="x.$$edit" type="button" class="btn btn-warning btn-circle" ng-click="cancelAttr(x)" popover="{{'icem.cancel' | i18next}}"
+													popover-trigger="mouseenter"><i class="fa fa-times"></i></button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!-- /.col-lg-8 (nested) -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.panel-body -->
+			</div>
+			<!-- /.panel -->
+		</div>
+		<!-- /.col-lg-8 -->
+	</div>
+	<!-- /.row -->
+</div>

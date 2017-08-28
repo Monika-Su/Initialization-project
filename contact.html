@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- TODO 兼容高速浏览模式 -->
+    <meta name="renderer" content="webkit">
+    <!-- TODO 移动设计优先(响应式) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link  href="css/bootstrap.min.css" rel="stylesheet">
+    <link  href="css/common.css" rel="stylesheet"/>
+    <link  href="css/pro.css" rel="stylesheet"/>
+    <title>关于树人湖笔</title>
+    <style>
+        .set-bg{
+            position: relative;
+            width:100%;
+            height:650px;
+            background-image: url('img/about.jpg');
+        }
+        p,a,span{
+            color:#080808;
+        }
+        .con-text{
+            margin:3% 0;
+        }
+    </style>
+</head>
+<body>
+<!--引入头部导航-->
+<header class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button data-target="#mycollapse" data-toggle="collapse" class="navbar-toggle collapsed">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <img height="40px" class="img-responsive" src="img/lgoo.png" alt=""/>
+        </div>
+        <div id="mycollapse" class="navbar-collapse collapse">
+            <!-- TODO 导航组件 -->
+            <ul class="nav navbar-nav navbar-left">
+                <!-- TODO 嵌套下拉菜单 -->
+                <li>
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        快速导航
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="index.html">首页</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">关于树人</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">产品简介</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">树人产品</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">加盟优势</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">产品支持</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">联系我们</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- TODO 搜索 -->
+            <form action="#" class="navbar-form navbar-right">
+                <div class="form-group has-feedback">
+                    <input class="form-control" placeholder="搜索" type="search"/>
+                </div>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">English&nbsp;|</a></li>
+                <li>
+                    <a href="products.html">产品站</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+<!--导航-->
+<nav class="nav-1">
+    <!--<div>-->
+        <!--<img class="img-responsive" src="img/nav.jpg" alt="#" />-->
+    <!--</div>-->
+    <div class="container ">
+        <ul class="row text-center" id="content">
+              <li class="col-md-2 col-xs-4 col-sm-2">
+                  <a href="index.html">首页
+				   <p>HOME</p>
+				  </a>             
+              </li>
+              <li class="col-md-2 col-xs-4 col-sm-2"><a href="about.html">关于树人
+			  <p>ABOUT US</p>
+			  </a>
+              </li>
+              <li class="col-md-2 col-xs-4 col-sm-2"><a href="products.html">产品中心
+			  <p>PRODUCTS</p>
+			  </a>
+              </li>
+              <li class="col-md-2 col-xs-4 col-sm-2"><a href="new.html">树人动态
+			   <p>NEWS</p>
+			  </a>
+              </li>
+              <li class="col-md-2 col-xs-4 col-sm-2"><a href="agent.html">招商代理
+			   <p>AGENT</p>
+			  </a>
+              </li>
+              <li class="col-md-2 col-xs-4 col-sm-2"><a href="contact.html">联系我们
+			   <p>CONTACT US</p>
+			  </a>
+              </li>
+        </ul>
+    </div>
+</nav>
+<!--引入底部导航-->
+<aside>
+    <div class="set-bg">
+        <div class="container">
+            <div class="row about-text">
+                <div class=" col-md-2 col-sm-2 col-xs-12">
+                    <p>联系我们
+                        <span>CONTACT US</span>
+                    </p>
+                </div>
+            </div>
+            <div class="row con-text">
+                <div class="col-md-4 col-sm-4 col-xs-12 text-center ">
+                   <p>
+                       联系人 : 王真真
+                       <br/>
+                       Email : srwhgs@163.com
+                       <br/>
+                       电 话 : 010-82676792 82676313
+                       <br/>
+                       手 机 : 13911467427
+                   </p>
+                </div>
+                <div class="col-md-8 col-sm-8 col-xs-12 text-right">
+                    <img  class="img-responsive" src="img/ditu.png" alt=""/>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</aside>
+<footer>
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-2  col-sm-3 col-xs-5">
+                <ul class="list-unstyled">
+                    <h4>关于树人</h4>
+                    <li><a href="">公司简介</a></li>
+                    <li><a href="">湖笔由来</a></li>
+                    <li><a href="">品牌文化</a></li>
+                    <li><a href="">社会责任</a></li>
+                    <li><a href="">联系我们</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2  col-sm-3 col-xs-6">
+                <ul class="list-unstyled">
+                    <h4>树人湖笔产品</h4>
+                    <li><a href="">学生专用毛笔</a></li>
+                    <li><a href="">学生专用墨汁</a></li>
+                    <li><a href="">学生专用宣纸</a></li>
+                    <li><a href="">学生专用砚台</a></li>
+                    <li><a href="">专利技术产品</a></li>
+                    <li><a href="">多功能专利水写布</a></li>
+                    <li><a href="">其他学生专用产品</a></li>
+                    <li><a href="">优惠套装</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2  col-sm-3 col-xs-5">
+                <ul class="list-unstyled">
+                    <h4>招商代理</h4>
+                    <li><a href="">竞争优势</a></li>
+                    <li><a href="">代理模式</a></li>
+                    <li><a href="">代理流程</a></li>
+                    <li><a href="">经销网络</a></li>
+                </ul>
+            </div>
+            <div class="foot-list-chat col-md-2  col-sm-3  col-xs-7">
+                <h4>关注官方微信</h4>
+                <img  src="img/ewm.jpg" alt="#"/>
+                <p style="color:#22ac38">微信:shurengongsi</p>
+            </div>
+            <div class="col-md-4  col-sm-12 col-xs-12">
+                <ul class="list-unstyled">
+                    <li>地址:北京市海淀区北四环西路68号左岸工社12层</li>
+                    <li>联系人:王真真</li>
+                    <li>Email：srwhgs@163.com</li>
+                    <li>网 址：www.shurenhubi.com</li>
+                    <li>手 机：13911467427</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12 col-md-6 col-sm-6">
+                <p style="font-size:15pt;padding-top:10px">服务热线：010-82676792</p>
+            </div>
+            <div class="col-md-6  col-sm-6 col-xs-12">
+                <p style="color:#d43f3a;font-size:18pt">招商热线：400 8100 168</p>
+            </div>
+            <div class="col-md-12  col-sm-6 col-xs-12 ">
+                <p style="font-size: 8pt;color:#535353;">
+                    Copyright © 2015版权所有京CIP备案348435DSA号
+                </p>
+            </div>
+        </div>
+    </div>
+
+</footer>
+<script src="js/jquery-1.11.3.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- TODO Bootstrap的插件文件 -->
+<script src="js/sr.js"></script>
+</body>
+</html>

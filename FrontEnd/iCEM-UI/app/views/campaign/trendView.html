@@ -1,0 +1,211 @@
+<div id="page-wrapper" ng-init="initReport()">
+	<div id="toggleBtn" class="row toggleBtn"><i class="fa fa-angle-left fa-2x" ng-click="CommonService.toggleBtn()" popover="{{'icem.menu.toggle' | i18next}}" popover-toggle="showTogglePopover"
+			popover-placement="bottom"></i></div>
+	<div class="col-lg-12">
+		<div class="row bottom-expand">
+			<div class="col-lg-12">
+				<div class="col-lg-2">
+					<label ng-i18next="icem.campaign.mediatype"></label>
+					<select class="form-control" ng-model="topPanel.mediaType" ng-init="topPanel.mediaType = media[0]" ng-options="v for v in media">
+		                	</select>
+				</div>
+				<div class="col-lg-3">
+					<label ng-i18next="icem.campaign.category"></label>
+					<div class="dropdown">
+						<a class="dropdown-toggle btn btn-default full-width" id="DropdownButton" data-toggle="dropdown" role="button">{{selectedCategory}}&nbsp;&nbsp;<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li role="presentation">
+								<div class="input-group input-group-sm search-control dropdown-menu header-drop-search">
+									<span class="input-group-addon header-drop-search">
+	                    	             <span class="glyphicon glyphicon-search"></span>
+									</span>
+									<input type="text" class="form-control header-drop-search" placeholder="Search Category" ng-model="catequery"></input>
+								</div>
+							</li>
+							<li class="dropdown dropdown-submenu" ng-repeat="item in category | filter : {name: catequery}">
+								<a class="dropdown-toggle" ng-mouseover="onCategory(item)" ng-click="clickCategory(item)" ng-class="{'right-arrow': item.subCategory.length > 0}">{{item.name}}</a>
+								<ul class="dropdown dropdown-menu" ng-show="item.showSub && item.subCategory.length > 0">
+									<li class="dropdown dropdown-submenu" ng-repeat="subitem in item.subCategory">
+										<a class="dropdown-toggle" ng-click="clickCategory(subitem)">{{subitem.name}}</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<label ng-i18next="icem.campaign.advertiser"></label>
+					<button class="btn btn-default" ng-if="selectionSite.length == 0 || selectionSite.length == siteList.length " ng-click="openSiteList()"
+						style="width:100%">
+	                    		<div >- All -</div>
+	                    	</button>
+					<button class="btn btn-default" ng-if="selectionSite.length > 0 && selectionSite.length != siteList.length" ng-click="openSiteList()"
+						style="width:100%">
+	                    		<div ng-repeat="dSite in selectionSite">{{ dSite.name }}</div>
+	                    	</button>
+				</div>
+				<div class="col-lg-3">
+					<label ng-i18next="icem.campaign.date"></label>
+					<!-- date picker -->
+					<div id="reportrange" class="right-margin" style="background: #fff; cursor: pointer; padding: 6px 10px 6px 10px; border: 1px solid #ccc;">
+						<i class="glyphicon glyphicon-calendar fa fa-calendar"></i> <span></span>
+						<b class="caret"></b>
+					</div>
+				</div>
+				<div class="col-lg-1 bottom-expand">
+					<label class="empty-label">&nbsp;</label>
+					<button type="button" class="btn btn-primary right-margin" click-once api-method="applyDayRange" input-data1="topPanel" time-out="true">{{'icem.apply' | i18next}}</button>
+				</div>
+			</div>
+			<div class="col-lg-12">
+				<div class="col-lg-4">
+					<input type="checkbox" ng-model="individualAdv" ng-click="aggAdvertiser = !aggAdvertiser" />
+					<label>Individual adv.</label>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<i class="fa fa-list-ol fa-fw"></i>&nbsp;<span ng-i18next="icem.adwords.select.data"></span>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12">
+								<input type="checkbox" ng-model="markup" ng-click="changeMarkup()" />
+								<label class="right-margin">Use Markup Data</label>
+							</div>
+							<div class="col-lg-12" ng-show="listNoData">
+								<div class="alert alert-warning report-global-control" role="alert">
+									<div>{{ 'icem.campaign.no.data' | i18next }}</div>
+								</div>
+							</div>
+							<div class="col-lg-12">
+								<div class="table-responsive">
+									<table ng-table="campaignTableParams" class="table table-bordered table-hover">
+										<thead>
+											<tr>
+												<th width="5%" ng-i18next="icem.campaign.mediatype"></th>
+												<th width="5%" ng-i18next="icem.campaign.advertiser"></th>
+												<th width="5%" ng-i18next="report.type.avgcpc"></th>
+												<th width="5%" ng-i18next="report.type.avgcpm"></th>
+												<th width="5%" ng-i18next="report.type.ctrRatio"></th>
+												<th width="5%" ng-i18next="report.type.cpv"></th>
+												<th width="5%" ng-i18next="report.type.vtr"></th>
+												<th width="5%" ng-i18next="icem.campaign.num.advertiser"></th>
+												<th width="5%" ng-i18next="icem.campaign.num.campaign"></th>
+												<th width="8%" ng-i18next="icem.campaign.total.budget"></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="x in $data">
+												<td style="text-align: right">{{ subPanel.mediaType }}</td>
+												<td ng-show="inAdv" style="text-align: right">{{ 'icem.campaign.sum' | i18next }}</td>
+												<td ng-show="!inAdv" style="text-align: right">{{ x.name }}</td>
+												<td style="text-align: right">{{ markup ? x.mcpc : x.cpc | number:2}}</td>
+												<td style="text-align: right">{{ markup ? x.mcpm : x.cpm | number:2}}</td>
+												<td style="text-align: right">{{ markup ? x.mctr*100 : x.ctr*100 | number:1}}%</td>
+												<td style="text-align: right">{{ markup ? x.mcpv : x.cpv | number:2}}</td>
+												<td style="text-align: right">{{ markup ? x.mvtr*100 : x.vtr*100 | number:1}}%</td>
+												<td style="text-align: right">{{ x.numAdv | number}}</td>
+												<td style="text-align: right">{{ x.numCampaign | number}}</td>
+												<td style="text-align: right">{{ markup ? x.mcost : x.cost | number}}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<!-- /.col-lg-8 (nested) -->
+					</div>
+					<!-- /.panel-body -->
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.col-lg (nested) -->
+		</div>
+		<!-- /.row  -->
+
+		<!-- chart -->
+		<div id="report-panel" class="row" ng-show="chartShow">
+			<div class="col-lg-12">
+				<!-- /.panel -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<i class="fa fa-bar-chart-o fa-fw"></i> <span ng-i18next="icem.menu.report"></span>
+					</div>
+					<!-- /.panel-heading -->
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="col-lg-5">
+									<select ng-model="chartType" ng-change="changeChartType()" ng-init="chartType='area'" class="form-control custom report-dropdown">
+										<option value="line">{{'report.chart.type.line' | i18next}}</option>
+										<option value="bar" >{{'report.chart.type.bar' | i18next}}</option>
+										<option value="spline">{{'report.chart.type.spline' | i18next}}</option>
+										<option value="step">{{'report.chart.type.step' | i18next}}</option>
+										<option value="area">{{'report.chart.type.area' | i18next}}</option>
+										<option value="area-spline">{{'report.chart.type.area-spline' | i18next}}</option>
+										<option value="area-step">{{'report.chart.type.area-step' | i18next}}</option>
+										<option value="scatter">{{'report.chart.type.scatter' | i18next}}</option>
+									</select>
+									<select class="form-control custom report-dropdown" ng-model="topPanel.metric" ng-change="changeMetric()" ng-options="met as (met | uppercase) for met in metric">
+				                	</select>
+								</div>
+							</div>
+						</div>
+						<!-- Chart -->
+						<div class="row">
+							<div class="report-chart" style="border: 0px;">
+								<div id="chart"></div>
+								<canvas id="canvas" width="100%" height="100%" class="report-canvas-download"></canvas>
+							</div>
+							<canvas id="canvas" width="100%" height="100%" class="report-canvas-download"></canvas>
+						</div>
+					</div>
+					<!-- /.panel-body -->
+				</div>
+				<!-- /.panel -->
+			</div>
+			<!-- /.col-lg-12 -->
+		</div>
+		<!-- report-panel -->
+	</div>
+	<!-- /.col-lg-12  -->
+</div>
+
+<!-- Advertiser -->
+<div class="modal fade" id="uploadListModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:30%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">{{ 'icem.campaign.advertiser'| i18next }}</h4>
+			</div>
+			<div class="modal-body">
+				<div class="table-responsive" style="height: 500px;">
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th></th>
+								<th ng-i18next="icem.campaign.advertiser"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="c in siteList">
+								<td witdth="10%">
+									<input type="checkbox" ng-click="saveSite(c.name,c.id)" />
+								</td>
+								<td witdth="10%" value="{{ c.id }}">{{ c.name }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal" ng-i18next="icem.close"></button>
+			</div>
+		</div>
+	</div>
+</div>

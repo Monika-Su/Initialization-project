@@ -1,0 +1,28 @@
+text {
+  fill: #333;
+  font-size: 12px; }
+
+.background {
+  fill: none;
+  pointer-events: all; }
+
+.unit {
+  cursor: pointer;
+  fill: #ccc;
+  stroke: rgba(0, 0, 0, 0.1);
+  stroke-width: 0.2px; }
+  
+.unit:hover {     
+	stroke: rgba(0, 0, 0, 0.6);
+	stroke-width: 0.6px; 
+}
+
+.legend-bg {
+  fill: #fff;
+  fill-opacity: 0.8; }
+
+.legend-bar {
+  stroke: #333;
+  stroke-width: 1px; }
+
+/*# sourceMappingURL=geomap.css.map */

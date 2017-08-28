@@ -1,0 +1,157 @@
+<div id="page-wrapper">
+    <div class="row toggleBtn" ng-click="CommonService.toggleBtn()"><i class="fa fa-angle-left fa-2x"></i></div>
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- /.panel -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <button class="btn btn-primary" ng-click="isEditChannelConfig(true, initChannelConfigObj)" ng-i18next="icem.add" ng-show="!isShowChannelConfig && (channelTypeList[0].isShow || channelTypeList[1].isShow || channelTypeList[2].isShow )"></button>
+                    <div class="row">
+                        <div class="col-lg-12" ng-show="isShowChannelConfig">
+                            <div class="modal-header">
+                                <h3 class="modal-title" ng-i18next="{{channelConfContainer.id ? 'icem.edit' : 'icem.add'}}"></h3>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 col-sm-12">
+                                        <div class="row">
+                                            <div class="col-lg-12 bottom-expand">
+                                                <label>{{ 'icem.name' | i18next}}</label>
+                                                <input class="form-control" type="text" ng-model="channelConfContainer.name" />
+                                            </div>
+                                            <div class="col-lg-12 bottom-expand">
+                                                <label>{{ 'icem.memo' | i18next}}</label>
+                                                <textarea class="form-control" ng-model="channelConfContainer.memo" maxlength="1000" rows="2"></textarea>
+                                            </div>
+                                            <div class="col-lg-12 bottom-expand">
+                                                <label>{{ 'icem.channelConfig.type' | i18next}}</label>
+                                                <select class="form-control" ng-model="channelConfContainer.type" ng-if="!channelConfContainer.id" ng-change="changeChannelType(channelConfContainer)"
+                                                    ng-options="x.name as ( 'icem.channelConfig.type.' + x.name | i18next ) for x in channelTypeList | filter: {isShow: true}"></select>
+                                                <select class="form-control" ng-model="channelConfContainer.type" ng-if="channelConfContainer.id" ng-disabled="channelConfContainer.id" ng-change="changeChannelType(channelConfContainer)"
+                                                    ng-options="x.name as ( 'icem.channelConfig.type.' + x.name | i18next ) for x in channelTypeList"></select>
+                                            </div>
+                                            <!--<div class="col-lg-12 bottom-expand">
+													<label class="checkbox-inline">
+														<input type="checkbox" ng-model="newRecommendSet.isLimit">{{ 'icem.recommendSet.isLimit' | i18next}}
+													</label> </div>
+												<div class="col-lg-12 bottom-expand" ng-if="newRecommendSet.isLimit">
+													<label>{{ 'icem.recommendSet.displayNum' | i18next}}</label>
+													<span class="label label-danger label-danger-mandatory" ng-i18next="icem.mandatory"></span>
+													<input class="form-control" type="text" ng-model="newRecommendSet.displayNum" only-number />
+												</div>-->
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 col-sm-12">
+                                        <div ng-if="channelConfContainer.type === 'EMAIL'">
+                                            <div class="col-lg-12 bottom-expand">
+                                                <label>{{ 'icem.channelConfig.mailHost' | i18next}}</label>
+                                                <input class="form-control" type="text" ng-model="extraConfigContainer.mailHost" />
+                                            </div>
+                                            <div class="col-lg-12 bottom-expand">
+                                                <label>{{ 'icem.channelConfig.mailUser' | i18next}}</label>
+                                                <input class="form-control" type="text" ng-model="extraConfigContainer.mailUser" />
+                                            </div>
+                                            <div class="col-lg-12 bottom-expand">
+                                                <label>{{ 'icem.channelConfig.mailPasswd' | i18next}}</label>
+                                                <input class="form-control" type="password" ng-model="extraConfigContainer.mailPasswd" />
+                                            </div>
+                                        </div>
+                                        <div ng-if="channelConfContainer.type === 'SMS'">
+                                            <div class="col-lg-12 bottom-expand">
+                                                <label>{{ 'icem.channelConfig.gatewayId' | i18next}}</label>
+                                                <input class="form-control" type="text" ng-model="extraConfigContainer.gatewayId" />
+                                            </div>
+                                            <div class="col-lg-12 bottom-expand">
+                                                <label>{{ 'icem.channelConfig.hostname' | i18next}}</label>
+                                                <input class="form-control" type="text" ng-model="extraConfigContainer.hostname" />
+                                            </div>
+                                            <div class="col-lg-12 bottom-expand">
+                                                <label>{{ 'icem.channelConfig.port' | i18next}}</label>
+                                                <input class="form-control" type="text" ng-model="extraConfigContainer.port" only-number />
+                                            </div>
+                                            <div class="col-lg-12 bottom-expand">
+                                                <label>{{ 'icem.channelConfig.programName' | i18next}}</label>
+                                                <input class="form-control" type="text" ng-model="extraConfigContainer.programName" />
+                                            </div>
+                                            <div class="col-lg-12 bottom-expand">
+                                                <label>{{ 'icem.channelConfig.textParamName' | i18next}}</label>
+                                                <input class="form-control" type="text" ng-model="extraConfigContainer.textParamName" />
+                                            </div>
+                                            <div class="col-lg-12 bottom-expand">
+                                                <label>{{ 'icem.channelConfig.toParamName' | i18next}}</label>
+                                                <input class="form-control" type="text" ng-model="extraConfigContainer.toParamName" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="col-lg-12">
+                                    <button type="button" class="btn btn-primary" click-once api-method="saveChannelConfig" input-data1="channelConfContainer"
+                                        input-data2="extraConfigContainer" ng-i18next="icem.save"></button>
+                                    <button type="button" class="btn btn-default" ng-click="isEditChannelConfig(false)" ng-i18next="icem.close"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="sk-fading-circle" ng-show="isLoading">
+                            <div class="sk-circle1 sk-circle"></div>
+                            <div class="sk-circle2 sk-circle"></div>
+                            <div class="sk-circle3 sk-circle"></div>
+                            <div class="sk-circle4 sk-circle"></div>
+                            <div class="sk-circle5 sk-circle"></div>
+                            <div class="sk-circle6 sk-circle"></div>
+                            <div class="sk-circle7 sk-circle"></div>
+                            <div class="sk-circle8 sk-circle"></div>
+                            <div class="sk-circle9 sk-circle"></div>
+                            <div class="sk-circle10 sk-circle"></div>
+                            <div class="sk-circle11 sk-circle"></div>
+                            <div class="sk-circle12 sk-circle"></div>
+                        </div>
+                        <div class="col-lg-12" ng-hide="isLoading">
+                            <div class="table-responsive">
+                                <table ng-table="channelConfigTableParams" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th ng-i18next="icem.name"></th>
+                                            <th ng-i18next="icem.memo"></th>
+                                            <th ng-i18next="icem.channelConfig.type"></th>
+                                            <th ng-i18next="icem.operation"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="x in tempChannelConfigList">
+                                            <td width="10%">
+                                                <span>{{x.name}}</span>
+                                            </td>
+                                            <td width="10%">
+                                                <span>{{x.memo}}</span>
+                                            </td>
+                                            <td width="10%">
+                                                <div>{{x.type}}</div>
+                                            </td>
+                                            <td width="10%" style="white-space:nowrap;">
+                                                <button type="button" class="btn btn-primary btn-circle" ng-click="isEditChannelConfig(true, x)"><i class="fa fa-list"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- /.col-lg-8 (nested) -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-8 -->
+    </div>
+    <!-- /.row -->
+</div>

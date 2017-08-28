@@ -1,0 +1,130 @@
+<div id="page-wrapper">
+	<div class="row toggleBtn" ng-click="CommonService.toggleBtn()"><i class="fa fa-angle-left fa-2x"></i></div>
+	<div id="report-panel" class="row">
+		<div class="col-lg-12">
+			<div class="panel panel-default">
+				<div class="panel-heading report-chart-heading">
+					<i class="fa fa-bar-chart-o fa-fw"></i> <span ng-i18next="icem.menu.report"></span>
+					<div class="pull-right">
+						<div class="btn-group"></div>
+					</div>
+				</div>
+				<div class="panel-body">
+					<div class="report-control">
+						<div class="report-control-tab">
+							<ul class="nav nav-tabs">
+								<li class="active"><a href="" data-toggle="tab" ng-click="tabControl('Behavior')">{{'report.behavor.tracking'|i18next}}</a>
+								</li>
+								<li><a href="" data-toggle="tab" ng-click="tabControl('GeoSum')">{{'report.behavor.map'|i18next}}</a>
+								</li>
+								<li><a href="" data-toggle="tab" ng-click="tabControl('Footprint')">{{'report.behavor.path'|i18next}}</a>
+								</li>
+								<li><a href="" data-toggle="tab" ng-click="tabControl('PixelFootprint')">{{'report.behavor.pixelFootprint'|i18next}}</a>
+								</li>
+								<li><a href="" data-toggle="tab" ng-click="tabControl('PageInfoTop')">{{'report.behavor.PageInfoTop'|i18next}}</a>
+								</li>
+								<li><a href="" data-toggle="tab" ng-click="tabControl('ReferPageInfoTop')">{{'report.behavor.ReferPageInfoTop'|i18next}}</a>
+								</li>
+								<li><a href="" data-toggle="tab" ng-click="tabControl('ReferSiteInfoTop')">{{'report.behavor.ReferSiteInfoTop'|i18next}}</a>
+								</li>
+							</ul>
+						</div>
+						<div class="report-control">
+							<div class="col-lg-8 col-md-6 col-sm-6">
+								<div class="row">
+									<div class="btn-group pull-left" role="group" ng-if="tabSwitch.tabBehavior">
+										<select class="form-control" ng-init="dateTypeOption = '1'" ng-model="dateTypeOption" ng-change="changeDateType(dateTypeOption)">
+                                                <option value="1">{{"report.behavor.daily"| i18next}}</option>
+                                                <option value="2">{{"report.behavor.monthly"| i18next}}</option>
+                                        </select>
+									</div>
+									<div class="col-lg-2 col-md-4 col-sm-4">
+										<select ng-model="chartType" ng-change="changeChartType()" ng-init="chartType='area';cate.value=='area-spline'" class="form-control custom report-dropdown"
+											ng-show="chartShow && tabSwitch.tabBehavior">
+                                            <option ng-repeat="cate in chartCategory" value="{{cate.value}}">{{cate.name | i18next}}</option>
+                                        </select>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-4 col-md-6 col-sm-6">
+								<div class="row">
+									<div id="reportrange" style="background: #fff; cursor: pointer; padding: 8px 10px 8px 10px; border: 1px solid #ccc ; display: inline-block;">
+										<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+										<span></span>
+										<b class="caret"></b>
+									</div>
+									<div class="pull-right">
+										<button type="button" class="btn btn-primary" click-once api-method="tabControl" input-data1="currentChart.chartType" time-out="true">{{'icem.apply' | i18next}}</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel-body">
+					<div class="report-chart" ng-show="chartShow">
+						<!-- Chart -->
+						<div id="chart" ng-show="tabSwitch.tabBehavior"></div>
+						<div id="map" ng-show="tabSwitch.tabGeoSum" style="height:{{geoMapHeight}}px;overflow: scroll;"></div>
+						<div id="sankey" ng-show="tabSwitch.tabFootprint || tabSwitch.tabPixelFootprint" style="height:{{pathMapHeight}}px;overflow: scroll;"></div>
+						<div id="landingInfoTop" ng-show="tabSwitch.tabPageInfoTop || tabSwitch.tabReferPageInfoTop || tabSwitch.tabReferSiteInfoTop"></div>
+					</div>
+				</div>
+				<div class="panel-body" ng-if="tabSwitch.tabPageInfoTop || tabSwitch.tabReferPageInfoTop || tabSwitch.tabReferSiteInfoTop">
+					<div class="col-lg-12">
+						<div class="table-responsive">
+							<table class="table table-bordered table-hover">
+								<thead>
+                                        <tr>
+                                            <th style="text-align: center;">{{reportListName()}}</th>
+                                            <th ng-i18next="report.behavor.pageView" style="text-align: center;"></th>
+                                        </tr>
+                                    </thead>
+								<tbody>
+									<tr ng-repeat="x in reportList">
+										<td width="10%">{{x.refersite || x.page || x.referpage}}</td>
+										<td width="10%">{{x.impressionnum}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- Behavor Data table -->
+					<div class="panel-body" ng-show="tabSwitch.tabBehavior">
+						<div class="col-lg-12">
+							<!-- <div class="btn-group pull-right" role="group" >
+							  <button type="button" class="btn btn-info" ng-click="clickReportType(1)" >{{'report.behavor.daily' | i18next}}</button>
+							  <button type="button" class="btn btn-primary" ng-click="clickReportType(3)">{{'report.behavor.monthly' | i18next}}</button>
+							  <button type="button" class="btn btn-success" ng-click="clickReportType(5)">{{'report.behavor.annual' | i18next}}</button>									  
+							</div> -->
+							<!--<div class="panel panel-default">
+                                <div class="panel-heading report-chart-heading left">
+                                    <i class="fa fa-table fa-fw"></i><span ng-i18next="report.site.summary"></span>
+                                </div>
+                                <div class="table-responsive" >
+                                    <table ng-table="behaviorTableParams" show-filter="true" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th ng-i18next="report.behavor.date"></th>
+                                                <th ng-i18next="report.behavor.pageView"></th>
+                                                <th ng-i18next="report.behavor.visitView"></th>
+                                                <th ng-i18next="report.behavor.uniVisitor"></th>
+                                                <th ng-i18next="report.behavor.avgVisitTime"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recordBody"></tbody>
+                                        <tr ng-repeat="data in $data">
+                                            <td>{{data.date}}</td>
+                                            <td>{{data.count}}</td>
+                                            <td>{{data.visit}}</td>
+                                            <td>{{data.visitor}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>-->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>

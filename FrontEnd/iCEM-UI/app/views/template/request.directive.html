@@ -1,0 +1,92 @@
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <!--<div class="row">
+            loadContainer : {{loadContainer}}<br>
+    </div>-->
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <label ng-i18next="icem.recommend.rule.request.site"></label>
+        </div>
+        <div class="col-lg-5 col-md-4 col-sm-12">
+            <input class="col-lg-4 form-control" type="text" ng-model="loadContainer.url" maxlength="300" />
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <select class="form-control" ng-model="loadContainer.urlOperator" ng-options="x as ('icem.rule.operator.' + x | i18next) for x in stringOperator">
+	        </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <label ng-i18next="icem.recommend.rule.request.page"></label>
+        </div>
+        <div class="col-lg-5 col-md-4 col-sm-12">
+            <input class="col-lg-4 form-control" type="text" ng-model="loadContainer.page" maxlength="300" />
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <select class="form-control" ng-model="loadContainer.pageOperator" ng-options="x as ('icem.rule.operator.' + x | i18next) for x in stringOperator">
+	        </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <label ng-i18next="icem.recommend.rule.request.parameters"></label>
+        </div>
+        <div class="col-lg-5 col-md-4 col-sm-12">
+            <div class="form-inline">
+                <input class="form-control" style="display: inline" type="text" ng-model="unitContainer.parmName" placeholder="{{'icem.recommend.rule.request.parameters.name' | i18next}}"
+                    maxlength="300" />
+                <input class="form-control" style="display: inline" type="text" ng-model="unitContainer.paramValue" placeholder="{{'icem.recommend.rule.request.parameters.value' | i18next}}"
+                    maxlength="300" />
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="form-inline">
+                <select class="form-control" style="display: inline" ng-model="unitContainer.paramOperator" ng-options="x as ('icem.rule.operator.' + x | i18next) for x in stringOperator">
+                </select>
+                <button class="btn btn-primary" ng-click="saveUnit(unitContainer)" ng-i18next="icem.add">
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-12"></div>
+        <div class="col-lg-9 col-md-8 col-sm-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th ng-i18next="icem.recommend.rule.request.parameters.name"></th>
+                            <th ng-i18next="icem.recommend.rule.request.parameters.value"></th>
+                            <th ng-i18next="icem.operation"></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="i in loadContainer.urlParams">
+                            <td ng-if="!i.$$edit" width="10%">{{i.parmName}}</td>
+                            <td ng-if="i.$$edit" width="10%">
+                                <input class="form-control" style="display: inline" type="text" ng-model="loadContainer.urlParams[$index].parmName" maxlength="300"
+                                />
+                            </td>
+                            <td ng-if="!i.$$edit" width="10%">{{i.paramValue}}</td>
+                            <td ng-if="i.$$edit" width="10%">
+                                <input class="form-control" style="display: inline" type="text" ng-model="loadContainer.urlParams[$index].paramValue" maxlength="300"
+                                />
+                            </td>
+                            <td ng-if="!i.$$edit" width="10%">{{'icem.rule.operator.' + i.paramOperator | i18next}}</td>
+                            <td ng-if="i.$$edit" width="10%">
+                                <select class="form-control" style="display: inline" ng-model="loadContainer.urlParams[$index].paramOperator" ng-options="x as ('icem.rule.operator.' + x | i18next) for x in stringOperator">
+                                </select>
+                            </td>
+                            <td width="3%">
+                                <button ng-if="!i.$$edit" type="button" class="btn btn-primary btn-circle" ng-click="i.$$edit = true;editUnit(i)"><i class="fa fa-list"></i></button>
+                                <button ng-if="!i.$$edit" type="button" class="btn btn-danger btn-circle" ng-click="deleteUnit($index)"><i class="fa fa-times"></i></button>
+                                <button ng-if="i.$$edit" type="button" class="btn btn-success btn-circle" ng-click="saveUnit(loadContainer.urlParams[$index])"><i class="fa fa-check"></i></button>
+                                <button ng-if="i.$$edit" type="button" class="btn btn-warning btn-circle" ng-click="cancelSaveUnit(i,$index)"><i class="fa fa-times"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

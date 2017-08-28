@@ -1,0 +1,38 @@
+{
+  "name": "icem-ui",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular": "^1.5.3",
+    "bootstrap": "^3.2.0",
+    "angular-bootstrap": "0.13.0",
+    "angular-animate": "^1.5.3",
+    "angular-cookies": "^1.5.3",
+    "angular-resource": "^1.5.3",
+    "angular-route": "^1.5.3",
+    "angular-sanitize": "^1.5.3",
+    "angular-touch": "^1.5.3",
+    "angular-local-storage": "^0.2.7",
+    "jquery": "1.x",
+    "jquery-ui": "~1.11.2",
+    "ng-table": "0.8.3",
+    "ng-i18next": "^0.5.2",
+    "i18next": "1.7.7",
+    "startbootstrap-sb-admin-2": "1.0.7",
+    "font-awesome": "4.4.0",
+    "ng-file-upload": "2.2.2",
+    "ckeditor": "4.5.8",
+    "bootstrap-hover-dropdown": "2.2.1",
+    "angular-popover-toggle": "0.1.1",
+    "moment": "2.7.0",
+    "c3": "^0.4.11",
+    "bootstrap-daterangepicker": "1.3.8"
+  },
+  "devDependencies": {},
+  "appPath": "app",
+  "moduleName": "iCemApp",
+  "resolutions": {
+    "i18next": "1.7.7",
+    "jquery": "1.x",
+    "font-awesome": "4.4.0"
+  }
+}

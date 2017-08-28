@@ -1,0 +1,307 @@
+<div id="page-wrapper">
+	<div class="row toggleBtn" ng-click="CommonService.toggleBtn()"><i class="fa fa-angle-left fa-2x"></i></div>
+	<div class="row">
+		<div class="col-lg-12">
+			<!-- /.panel -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<button class="btn btn-primary" ng-click="openRecommendPanel(0,true,initRecommentSetObj)" ng-disabled="!tempRecommendSetList"
+						ng-i18next="icem.add" ng-show="!isShowRecommendSet && !isShowRecommendSetItemList"></button>
+
+					<!--  Recommend Set List  -->
+					<div class="row">
+						<div class="col-lg-12" ng-show="isShowRecommendSet">
+							<div class="modal-header">
+								<h3 class="modal-title" ng-i18next="{{newRecommendSet.id ? 'icem.edit' : 'icem.add'}}"></h3>
+							</div>
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-lg-6 col-md-12 col-sm-12">
+										<div class="row">
+											<div class="col-lg-12 bottom-expand">
+												<label>{{ 'icem.recommendSet.name' | i18next}}</label>
+												<span class="label label-danger label-danger-mandatory" ng-i18next="icem.mandatory"></span>
+												<input class="form-control" type="text" ng-model="newRecommendSet.name" />
+											</div>
+											<div class="col-lg-12 bottom-expand">
+												<label>{{ 'icem.recommendSet.memo' | i18next}}</label>
+												<textarea class="form-control" ng-model="newRecommendSet.memo" maxlength="1000" rows="2"></textarea>
+											</div>
+											<div class="col-lg-12 bottom-expand">
+												<label class="checkbox-inline">
+														<input type="checkbox" ng-model="newRecommendSet.isLimit">{{ 'icem.recommendSet.isLimit' | i18next}}
+													</label> </div>
+											<div class="col-lg-12 bottom-expand" ng-if="newRecommendSet.isLimit">
+												<label>{{ 'icem.recommendSet.displayNum' | i18next}}</label>
+												<span class="label label-danger label-danger-mandatory" ng-i18next="icem.mandatory"></span>
+												<input class="form-control" type="text" ng-model="newRecommendSet.displayNum" only-number />
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-12 col-sm-12">
+										<div class="col-lg-12 bottom-expand">
+											<label>{{ 'icem.recommendSet.type' | i18next}}</label>
+											<select class="form-control" ng-model="newRecommendSet.type" ng-disabled="newRecommendSet.id" ng-change="changeRecommendType(newRecommendSet)"
+												ng-options="x.name as ( 'icem.recommendSet.type.' + x.name | i18next ) for x in recommendType"></select>
+										</div>
+										<div class="col-lg-12 bottom-expand">
+											<label>{{ 'icem.channelConfig.type' | i18next}}</label>
+											<select class="form-control" ng-disabled="true" ng-model="newRecommendSet.channel" ng-options="x.name as ('icem.channelConfig.type.' + x.name | i18next) for x in channelList">
+													</select>
+										</div>
+										<div class="col-lg-12 bottom-expand" ng-if="newRecommendSet.recommendContentId">
+											<label>{{ 'icem.rule.content' | i18next}}</label>
+											<select class="form-control" ng-model="newRecommendSet.recommendContentId" ng-options="x.id as x.name for x in recommendContentList">
+													</select>
+										</div>
+										<div class="col-lg-12 bottom-expand" ng-if="newRecommendSet.behaviorType">
+											<label>{{ 'icem.recommendSet.BehaviorType' | i18next}}</label>
+											<select class="form-control" ng-model="newRecommendSet.behaviorType" ng-options="x.name as ('icem.recommendSet.BehaviorType.' + x.name | i18next) for x in behaviorTypeList">
+													</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<div class="col-lg-12">
+									<button type="button" class="btn btn-primary" click-once api-method="saveRecommendSet" input-data1="newRecommendSet" ng-i18next="icem.save"></button>
+									<button type="button" class="btn btn-default" ng-click="openRecommendPanel(0,false)" ng-i18next="icem.close"></button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--  Recommend Set Item List  -->
+					<div class="row">
+						<div class="col-lg-12" ng-show="isShowRecommendSetItemList">
+							<div class="modal-header">
+								<h4 class="modal-title">{{'icem.recommendSet.name' | i18next }} - {{currentSet.setName}}</h4>
+							</div>
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-lg-12">
+										<div class="row">
+											<div class="sk-fading-circle" ng-show="isLoadingSetItemList">
+												<div class="sk-circle1 sk-circle"></div>
+												<div class="sk-circle2 sk-circle"></div>
+												<div class="sk-circle3 sk-circle"></div>
+												<div class="sk-circle4 sk-circle"></div>
+												<div class="sk-circle5 sk-circle"></div>
+												<div class="sk-circle6 sk-circle"></div>
+												<div class="sk-circle7 sk-circle"></div>
+												<div class="sk-circle8 sk-circle"></div>
+												<div class="sk-circle9 sk-circle"></div>
+												<div class="sk-circle10 sk-circle"></div>
+												<div class="sk-circle11 sk-circle"></div>
+												<div class="sk-circle12 sk-circle"></div>
+											</div>
+											<div class="col-lg-5" ng-hide="isLoadingSetItemList">
+												<button class="btn btn-primary" ng-click="openRecommendPanel(2,true,initRecommentSetItemObj)" ng-i18next="icem.recommendSet.add.rule"></button>
+												<div class="table-responsive">
+													<table ng-table="recommendItemListTableParams" class="table table-condensed table-hover">
+														<thead>
+															<tr>
+																<th ng-i18next="icem.recommendSet.rule.name"></th>
+																<th ng-i18next="icem.recommendSet.memo"></th>
+																<th ng-i18next="icem.status"></th>
+																<th ng-i18next="icem.operation"></th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr ng-repeat="y in recommendSetItemList">
+																<td width="10%" class="text-center">
+																	<span>{{y.name}}</span>
+																</td>
+																<td width="10%" class="text-center">
+																	<span>{{y.memo}}</span>
+																</td>
+																<td width="10%" class="text-center">
+																	<div>{{y.status}}</div>
+																</td>
+																<td width="10%" style="white-space:nowrap;" class="text-center">
+																	<button type="button" class="btn btn-primary btn-circle" ng-click="openRecommendPanel(2,true,y)"><i class="fa fa-list"></i></button>
+																	<button type="button" class="btn btn-danger btn-circle" ng-click="removeRecommend('removeRecommendSetItem','recommendItemListTableParams',y.id)"><i class="fa fa-times"></i></button>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+													<br>
+												</div>
+											</div>
+											<div class="col-lg-7" ng-if="newRecommendSetItem !==  null">
+												<div class="panel panel-default">
+													<!--<b>newRecommendSetItem :</b> {{newRecommendSetItem}}<br>-->
+													<div class="panel-heading">
+														<h3 ng-i18next="{{newRecommendSetItem.id ? 'icem.edit' : 'icem.add'}}"></h3>
+													</div>
+													<div class="panel-body panel-body-text-left">
+														<div class="row">
+															<div class="col-lg-12 bottom-expand">
+																<label>{{ 'icem.recommendSet.rule.name' | i18next}}</label>
+																<span class="label label-danger label-danger-mandatory" ng-i18next="icem.mandatory"></span>
+																<input class="form-control" type="text" ng-model="newRecommendSetItem.name" />
+															</div>
+															<div class="col-lg-12 bottom-expand">
+																<label>{{ 'icem.recommendSet.memo' | i18next}}</label>
+																<textarea class="form-control" ng-model="newRecommendSetItem.memo" maxlength="500" rows="2"></textarea>
+															</div>
+															<div class="col-lg-12 bottom-expand">
+																<label>{{ 'icem.rule.content' | i18next}}</label>
+																<span class="label label-danger label-danger-mandatory" ng-i18next="icem.mandatory"></span>
+																<select class="form-control" style="width: 60%; display: inline" ng-model="newRecommendSetItem.recommendContentId" ng-options="x.id as x.name for x in recommendContentList">
+																	</select>
+															</div>
+															<div class="col-lg-12 bottom-expand">
+																<label>{{ 'icem.menu.recommendItem' | i18next}}</label>
+																<!--<span class="label label-danger label-danger-mandatory" ng-i18next="icem.mandatory"></span>-->
+																<select class="form-control" style="width: 60%; display: inline" ng-model="newRecommendSetItem.itemGroupId" ng-options="x.itemGroupId as x.name for x in itemGroupList">
+																	</select>
+															</div>
+															<div class="col-lg-12 bottom-expand">
+																<tabset>
+																	<tab heading="{{'icem.recommend.rule.visit'|i18next}}" select="selectRuleTab('visit')"></tab>
+																	<tab heading="{{'icem.recommend.rule.attribute'|i18next}}" select="selectRuleTab('attribute')"></tab>
+																	<tab heading="{{'icem.recommend.rule.schedule'|i18next}}" select="selectRuleTab('schedule')"></tab>
+																</tabset>
+															</div>
+															<!-- Visit Tab -->
+															<div ng-show="ruleTab === 'visit'">
+																<div class="col-lg-4">
+																	<label ng-i18next="icem.recommend.rule.pvCount"></label>
+																</div>
+																<div class="col-lg-4">
+																	<input class="form-control" type="text" ng-model="newRecommendSetItem.visit.clickNum" maxlength="50" only-number />
+																</div>
+																<div class="col-lg-4 bottom-expand">
+																	<select class="form-control" ng-model="newRecommendSetItem.visit.clickOperator">
+																		    <option value="" ng-selected="true" ></option>
+																			<option ng-repeat="x in numericOperator" value="{{x}}">{{ 'icem.rule.operator.' + x | i18next}}</option>
+																		</select>
+																</div>
+																<div class="col-lg-4">
+																	<label ng-i18next="icem.recommend.rule.visitCount"></label>
+																</div>
+																<div class="col-lg-4">
+																	<input class="form-control" type="text" ng-model="newRecommendSetItem.visit.impressionNum" maxlength="50" only-number />
+																</div>
+																<div class="col-lg-4 bottom-expand">
+																	<select class="form-control" ng-model="newRecommendSetItem.visit.impressionOperator">
+																		    <option value="" ng-selected="true" ></option>
+																			<option ng-repeat="x in numericOperator" value="{{x}}">{{ 'icem.rule.operator.' + x | i18next}}</option>
+																		</select>
+																</div>
+																<div class="col-lg-4">
+																	<label ng-i18next="icem.recommend.rule.visitInterval"></label>
+																</div>
+																<div class="col-lg-4">
+																	<input class="form-control" type="text" ng-model="newRecommendSetItem.visit.recencyNum" maxlength="50" only-number />
+																</div>
+																<div class="col-lg-4 bottom-expand">
+																	<select class="form-control" ng-model="newRecommendSetItem.visit.recencyOperator">
+																		    <option value="" ng-selected="true" ></option>
+																			<option ng-repeat="x in numericOperator" value="{{x}}">{{ 'icem.rule.operator.' + x | i18next}}</option>
+																		</select>
+																</div>
+															</div>
+															<!-- attribute tab in directive -->
+															<div ng-show="ruleTab === 'attribute'">
+																<user-attribute site-id="cSite.id" load-container="attributeContainer" load-service="RecommendSetService" load-api="getRecommendSetAttribute"></user-attribute>
+															</div>
+															<div ng-show="ruleTab === 'schedule'">
+																<schedule-pick load-schedule="scheduleContainer"></schedule-pick>
+															</div>
+														</div>
+													</div>
+													<div class="panel-footer">
+														<button type="button" class="btn btn-primary" click-once api-method="saveRecommendItem" input-data1="newRecommendSetItem"
+															ng-i18next="icem.save"></button>
+														<button type="button" class="btn btn-default" ng-click="openRecommendPanel(2,false)" ng-i18next="icem.close"></button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" ng-click="openRecommendPanel(1,false)" ng-i18next="icem.close"></button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!--</div>-->
+				<!-- /.panel-heading -->
+				<div class="panel-body">
+					<div class="row">
+						<div class="sk-fading-circle" ng-show="isLoading">
+							<div class="sk-circle1 sk-circle"></div>
+							<div class="sk-circle2 sk-circle"></div>
+							<div class="sk-circle3 sk-circle"></div>
+							<div class="sk-circle4 sk-circle"></div>
+							<div class="sk-circle5 sk-circle"></div>
+							<div class="sk-circle6 sk-circle"></div>
+							<div class="sk-circle7 sk-circle"></div>
+							<div class="sk-circle8 sk-circle"></div>
+							<div class="sk-circle9 sk-circle"></div>
+							<div class="sk-circle10 sk-circle"></div>
+							<div class="sk-circle11 sk-circle"></div>
+							<div class="sk-circle12 sk-circle"></div>
+						</div>
+						<div class="col-lg-12" ng-hide="isLoading">
+							<div class="table-responsive">
+								<table ng-table="recommendSetListTableParams" class="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th ng-i18next="icem.recommendSet.name"></th>
+											<th ng-i18next="icem.recommendSet.memo"></th>
+											<th ng-i18next="icem.status"></th>
+											<th ng-i18next="icem.operation"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="x in tempRecommendSetList">
+											<td width="10%">
+												<span>{{x.name}}</span>
+											</td>
+											<td width="10%">
+												<span>{{x.memo}}</span>
+											</td>
+											<td width="10%">
+												<div>{{x.status}}</div>
+											</td>
+											<td width="10%" style="white-space:nowrap;">
+												<button type="button" class="btn btn-primary btn-circle" ng-click="openRecommendPanel(0,true,x)"><i class="fa fa-list"></i></button>
+												<button type="button" class="btn btn-danger btn-circle" ng-click="removeRecommend('removeRecommendSet','recommendSetListTableParams',x.id)"><i class="fa fa-times"></i></button>
+												<button type="button" popover="{{'icem.recommend.edit.rule' | i18next}}" popover-trigger="mouseenter" popover-placement="top"
+													class="btn btn-info btn-circle" ng-click="openRecommendPanel(1,true,x)" ng-if="!(x.type === 'ITEM_AUTO')">
+														<i class="fa fa-cubes"></i>
+													</button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!-- /.col-lg-8 (nested) -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.panel-body -->
+			</div>
+			<!-- /.panel -->
+		</div>
+		<!-- /.col-lg-8 -->
+	</div>
+	<!-- /.row -->
+</div>
+
+<!-- Angular Template -->
+<script type="text/ng-template" id="popover-html-unsafe-popup.html">
+    <div class="popover {{placement}}" style="width: auto;" ng-class="{ in: isOpen(), fade: animation() }">
+		<div class="arrow"></div>
+		<div class="popover-inner">
+  		<h3 class="popover-title" ng-bind="title" ng-show="title"></h3>
+  		<div class="popover-content" bind-html-unsafe="content"></div>
+		</div>
+	</div>
+</script>

@@ -1,0 +1,140 @@
+<div id="page-wrapper">
+    <div class="row toggleBtn" ng-click="CommonService.toggleBtn()"><i class="fa fa-angle-left fa-2x"></i></div>
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- /.panel -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <button class="btn btn-primary" ng-click="isEditScoreRule(true, initScoreRuleObj)" ng-i18next="icem.add" ng-show="!isShowScoreRule"></button>
+                    <div class="row">
+                        <div class="col-lg-12" ng-show="isShowScoreRule">
+                            <div class="modal-header">
+                                <h3 class="modal-title" ng-i18next="{{scoreRuleContainer.id ? 'icem.edit' : 'icem.add'}}"></h3>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 bottom-expand">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                                <label ng-i18next="icem.score.rule.name"></label>
+                                                <input class="form-control bottom-expand" type="text" ng-model="scoreRuleContainer.name" maxlength="100" />
+                                                <label ng-i18next="icem.score.rule.rewards"></label>
+                                                <div class="form-inline">
+                                                    <input class="form-control" style="display: inline" type="text" ng-model="scoreRuleContainer.rewardCalcValue" maxlength="5"
+                                                        only-number />
+                                                    <select class="form-control" style="display: inline" ng-model="scoreRuleContainer.rewardCalcOperator" ng-options="x as ('icem.score.' + x | i18next) for x in rewardCalcOperatorList"></select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                                <label ng-i18next="icem.memo"></label>
+                                                <textarea class="form-control" rows="4" type="text" ng-model="scoreRuleContainer.memo" maxlength="100" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 bottom-expand">
+                                        <tabset>
+                                            <tab heading="{{'icem.recommend.rule.attribute'|i18next}}" select="selectRuleTab('attribute')" ng-show="true"></tab>       
+                                            <tab heading="{{'icem.recommend.rule.request'|i18next}}" select="selectRuleTab('request')" ng-show="true"></tab>
+                                            <tab heading="{{'icem.recommend.rule.referrer'|i18next}}" select="selectRuleTab('referrer')" ng-show="true"></tab>
+                                            <tab heading="{{'icem.recommend.rule.schedule'|i18next}}" select="selectRuleTab('schedule')" ng-show="true"></tab>
+                                     	
+                                        </tabset>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 bottom-expand">
+                                        <div ng-show="ruleTab === 'schedule'">
+                                            <schedule-pick load-schedule="scheduleContainer" ></schedule-pick>
+                                        </div>
+                                        <div ng-show="ruleTab === 'attribute'">
+											<user-attribute site-id="cSite.id" load-container="attributeContainer" load-service="ScoreService" load-api="getAttributes"></user-attribute>
+										</div>
+                                        <div ng-show="ruleTab === 'request'">
+                                            <request-panel load-container="requestContainer"></request-panel>
+                                        </div>
+                                        <div ng-show="ruleTab === 'referrer'">
+                                            <referrer-panel load-container="referrerContainer"></referrer-panel>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="col-lg-12">
+                                    <button type="button" class="btn btn-primary" click-once api-method="saveScoreRule" input-data1="scoreRuleContainer" ng-i18next="icem.save"></button>
+                                    <button type="button" class="btn btn-default" ng-click="isEditScoreRule(false)" ng-i18next="icem.close"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="sk-fading-circle" ng-show="isLoading">
+                            <div class="sk-circle1 sk-circle"></div>
+                            <div class="sk-circle2 sk-circle"></div>
+                            <div class="sk-circle3 sk-circle"></div>
+                            <div class="sk-circle4 sk-circle"></div>
+                            <div class="sk-circle5 sk-circle"></div>
+                            <div class="sk-circle6 sk-circle"></div>
+                            <div class="sk-circle7 sk-circle"></div>
+                            <div class="sk-circle8 sk-circle"></div>
+                            <div class="sk-circle9 sk-circle"></div>
+                            <div class="sk-circle10 sk-circle"></div>
+                            <div class="sk-circle11 sk-circle"></div>
+                            <div class="sk-circle12 sk-circle"></div>
+                        </div>
+                        <div class="col-lg-12" ng-hide="isLoading">
+                            <div class="table-responsive">
+                                <table ng-table="scoreRuleTableParams" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th ng-i18next="icem.score.rule.name"></th>
+                                            <th ng-i18next="icem.memo"></th>
+                                            <th ng-i18next="icem.status"></th>
+                                            <th ng-i18next="icem.operation"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="x in tempScoreRuleList">
+                                            <td width="10%">
+                                                <span>{{x.name}}</span>
+                                            </td>
+                                            <td width="10%">
+                                                <span>{{x.memo}}</span>
+                                            </td>
+                                            <td width="10%">
+                                                <div>{{x.status}}</div>
+                                            </td>
+                                            <td width="10%" style="white-space:nowrap;">
+                                                <button type="button" class="btn btn-primary btn-circle" ng-click="isEditScoreRule(true,x)"><i class="fa fa-list"></i></button>
+                                                <button type="button" class="btn btn-danger btn-circle" ng-click="deleteScoreRule(x.id)"><i class="fa fa-times"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- /.col-lg-8 (nested) -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-8 -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /#page-wrapper -->
+
+<!-- Angular Template -->
+<script type="text/ng-template" id="popover-html-unsafe-popup.html">
+    <div class="popover {{placement}}" style="width: auto;" ng-class="{ in: isOpen(), fade: animation() }">
+		<div class="arrow"></div>
+		<div class="popover-inner">
+  		<h3 class="popover-title" ng-bind="title" ng-show="title"></h3>
+  		<div class="popover-content" bind-html-unsafe="content"></div>
+		</div>
+	</div>
+</script>

@@ -1,0 +1,167 @@
+<modal id="importModal" ng-if="!preShow">
+                <div class="modal-header">
+                    <button type="button" class="close" ng-click="cancel()" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" ng-i18next="icem.import"></h3>
+                </div>
+                <div class="modal-body" style="width: 30%;margin: 0 auto;">
+                        <div>
+	                        <div ng-file-drop ng-file-select ng-model="batchFile" class="drop-box" drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}"  ng-file-change="onBatchFileSelect($files)" ng-multiple="false" allow-dir="false" accept="*.csv, *.txt" >
+	                                {{'icem.uploadCsv' | i18next}}
+	                        </div>
+                        </div>
+                        <br>
+                        <div class="col-lg-5" ng-hide="disableMerge">
+	                        <label for="uploadTypeMerge"  ng-i18next="icem.merge"></label>
+	                        <input type="radio" name="uploadType" value="merge" ng-model="importModal.uploadType">
+                        </div>
+                        <div class="col-lg-5">
+	                        <label for="uploadTypeRenew" ng-i18next="icem.renew"></label>
+	                        <input type="radio" name="uploadType" value="renew" ng-model="importModal.uploadType">
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="cancel()" ng-i18next="icem.close"></button>
+                </div>
+</modal>
+<div id="importPreviewModal" ng-if="preShow">
+				<div class="modal-header">
+				    <button type="button" class="close" ng-click="cancel()" aria-hidden="true">&times;</button>
+					<h3 class="modal-title" ng-i18next="icem.import"></h3>					
+				</div>
+				<div class="modal-body">
+                   	<div class="row">
+						<div class="col-lg-12">
+							<div ng-repeat="info in infos">{{info}}</div>
+							<div class="table-responsive">
+								<table ng-table="impoortPreviewTableParams" class="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th ng-repeat="t in imTitlePreview" ng-i18next="{{ t.title }}" width="{{ t.width }}"></th>
+										</tr>
+									</thead>
+									<tbody>
+										  <tr ng-repeat="pr in $data">
+								            <td ng-switch on="pr.previewStatus">
+											 	<sapn ng-switch-when="C" ng-i18next="icem.created"></sapn>
+											 	<sapn ng-switch-when="M" ng-i18next="icem.modified"></sapn>
+											 	<sapn ng-switch-when="D" ng-i18next="icem.delete"></sapn>
+							            	</td>
+										    <td ng-show="prnameExist">
+								                <span>{{pr.name}}</span>
+								            </td>
+								            <!-- conversionPage -->
+								            <td ng-show="optionExist">
+								            	<ol>
+										        	<li ng-repeat="opt in pr.options">{{ 'icem.conversion.' + opt | i18next}}</li>
+										        </ol>
+								            </td>
+								            <!-- scoreGroup -->
+								            <td ng-show="operationExist">
+												<div ng-if="pr.options.length == 0"></div>
+												<div
+													ng-if="pr.options.length != 0 && pr.options[0] == 'ONCE_PER_SESSION'">{{'icem.score.group.option.description' | i18next}}</div>
+											</td>
+											<td ng-show="expireExist"><span>{{pr.expire}}</span></td>
+								            <!-- webRecommend and adsRecommend-->
+								            <td ng-show="disableExist">
+                                                <span>{{ 'icem.recommend.disabled' | i18next }}</span>
+                                            </td>
+                                            <!-- scoreRule -->
+                                            <td ng-show="actionExist">
+											       <span>{{ pr.rewardDescription }}</span>
+											</td>
+                                            <!-- mailRecommend -->
+                                            <td ng-show="elemIDExist">
+                                                <span>{{pr.blockId}}</span>
+                                            </td>
+                                            <!-- webRecommend rule import-->
+                                            <td ng-show="ruleContentExist">
+                                                <dl ng-show="pr.result.type === 'ITEM_GROUP'">
+                                                     <dt>{{ 'icem.recommend.templateId' | i18next}}</dt>
+                                                         <dd>{{ pr.result.templateName }}</dd>
+                                                     <dt>{{ 'icem.submenu.itemList' | i18next}}</dt>
+                                                         <dd>{{ pr.result.contentName }}</dd>                                                            
+                                                 </dl>
+                                                 <dl ng-show="pr.result.type === 'CONTENT'">
+                                                     <dt>{{ 'report.tab.content' | i18next}}</dt>
+                                                         <dd>{{ pr.result.contentName }}</dd>                                                           
+                                                 </dl>
+                                            </td>
+                                            <td ng-show="ruleConditionExist">
+                                                <span>{{pr.conditionDescription}}</span>
+                                            </td>
+								            <td ng-show="prtypeExist">
+								            <i ng-class="getRecommendTypeIcon(getShortName(pr.type))"></i>
+								                <span>{{pr.type | i18next}}</span>
+								            </td>
+											<!-- mailRecommendContent -->
+								            <td ng-show="contentExist">
+								            	<ol>
+								                	<li ng-repeat="xc in pr.contents">{{xc.memo}}</li>
+								                </ol>
+								            </td>
+								            <td ng-show="prmemoExist">
+								            	<span>{{pr.memo}}</span>
+								            </td>
+								            <!-- adsRecommend -->								            
+								            <td ng-show="segmentExist">
+                                                <span>{{ (!pr.hasSegment ? 'RULE_BASE' : 'segment') | i18next}}</span>
+                                            </td>
+                                            <!--  userItemFilter -->                                            
+                                            <td ng-show="userFilter">
+                                                <span>{{ pr.name }}</span>
+                                            </td>
+                                            <td ng-show="userFilter">
+                                                <span>{{('icem.filter.' + pr.type) | i18next}}</span>
+                                            </td>
+                                            <td ng-show="userFilter">
+                                                <span class="angular-js-linebreak">{{ pr.userCondition }}</span>
+                                            </td>
+                                            <td ng-show="userFilter">
+                                                <span class="angular-js-linebreak">{{ pr.itemCondition }}</span>
+                                            </td>
+                                            <!--  itemItemFilter -->                                            
+                                            <td ng-show="itemFilter">
+                                                <span>{{ pr.name }}</span>
+                                            </td>
+                                            <td ng-show="itemFilter">
+                                                <span>{{('icem.filter.' + pr.type) | i18next}}</span>
+                                            </td>                                          
+                                            <td ng-show="itemFilter">
+                                                <span class="angular-js-linebreak">{{ pr.antecedentItemCondition }}</span>
+                                            </td>  
+                                            <td ng-show="itemFilter">
+                                                <span class="angular-js-linebreak">{{ pr.consequentItemCondition }}</span>
+                                            </td>  
+                                            
+                                            <td ng-show="rankingFilter">
+                                                <span>{{ pr.name }}</span>
+                                            </td>                                          
+                                            <td ng-show="rankingFilter">
+                                                <span class="angular-js-linebreak">{{ pr.itemConditionDescription }}</span>
+                                            </td>  
+                                            <td ng-show="rankingFilter">
+                                                <span ng-if="pr.groupMask" >
+										              {{itemAliasName['grouping']}}<br/>
+										        </span>
+										        <span ng-repeat="pr in x.categoryMasks" >
+										              {{itemAliasName[m.toLowerCase()]}}<br/>
+										        </span>
+                                            </td>
+
+								            <td ng-show="statusExist" ng-switch on="pr.inUse">
+											 	<div ng-switch-when="true">{{'icem.inUse' | i18next}}</div>
+											 	<div ng-switch-when="false"></div>
+											</td>																						
+										  </tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" ng-click="applyImport()" ng-i18next="icem.apply"></button>
+					<button type="button" class="btn btn-default" ng-click="cancel()" ng-i18next="icem.close"></button>
+				</div>
+</div>

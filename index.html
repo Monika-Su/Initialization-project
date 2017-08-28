@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <!-- TODO 兼容IE浏览器 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- TODO 兼容高速浏览模式 -->
+    <meta name="renderer" content="webkit">
+    <!-- TODO 移动设计优先(响应式) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>树人文化有限公司</title>
+    <!-- TODO Bootstrap -->
+    <link  href="css/bootstrap.min.css" rel="stylesheet">
+    <link  href="css/common.css" rel="stylesheet"/>
+    <!--
+       TODO IE8版本之前(6,7,8)不支持HTML5的新标签和CSS3的媒体查询
+       TODO * html5shiv.min.js
+       TODO   专门兼容IE6/7/8版本的HTML5新标签
+       TODO * respond.min.js
+       TODO   专门兼容IE6/7/8版本的CSS3提供的媒体查询
+     -->
+    <script src="js/html5shiv.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <style>
+        body{
+            background: #f1f1f1;
+        }
+        .index-middle{
+            background:url("img/bg.jpg");
+            position: relative;
+            color: #fff;
+        }
+        .index-middle a{
+            color: #fff;
+        }
+        section{
+            padding:10px 0;
+        }
+    </style>
+</head>
+<body>
+<!--TODO 头部导航-->
+<header class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button data-target="#mycollapse" data-toggle="collapse" class="navbar-toggle collapsed">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <img height="40px" class="img-responsive" src="img/lgoo.png" alt=""/>
+        </div>
+        <div id="mycollapse" class="navbar-collapse collapse">
+            <!-- TODO 导航组件 -->
+            <ul class="nav navbar-nav navbar-left ">
+                <!-- TODO 嵌套下拉菜单 -->
+                <li>
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        快速导航
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu menu">
+                        <li><a href="index.html">首页</a></li>
+                        <li class="divider"></li>
+                        <li><a href="about.html">关于树人</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="products.html">产品中心</a></li>
+                        <li class="divider"></li>
+                        <li><a href="new.html">树人动态</a></li>
+                        <li class="divider"></li>
+                        <li><a href="agent.html">加盟优势</a></li>
+                        <li class="divider"></li>
+                        <li><a href="contact.html">联系我们</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- TODO 搜索 -->
+            <form action="#" class="navbar-form navbar-right">
+                <div class="form-group has-feedback">
+                    <input class="form-control" placeholder="搜索" type="search"/>
+                </div>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">English&nbsp;|</a></li>
+                <li>
+                    <a href="products.html">产品站</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+<!--banner图片-->
+<aside>
+    <!-- TODO 用于包裹轮播图的图片内容 -->
+    <div id="mycarousel" data-ride="carousel" class="carousel slider">
+        <div class="carousel-inner">
+            <div class="item active">
+                <img src="img/b1.jpg"/>
+            </div>
+            <div class="item">
+                <img src="img/b2.jpg"/>
+            </div>
+            <div class="item">
+                <img src="img/b3.jpg"/>
+            </div>
+        </div>
+        <!-- 轮播图的方向-->
+        <a class="carousel-control left"
+           data-slide="prev"
+           href="#mycarousel">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="carousel-control right"
+           data-slide="next"
+           href="#mycarousel">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+        <!-- 列表定位-->
+        <ol class="carousel-indicators">
+            <li data-target="#mycarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#mycarousel" data-slide-to="1"></li>
+            <li data-target="#mycarousel" data-slide-to="2"></li>
+        </ol>
+    </div>
+    <!--</div>-->
+    <!--</div>-->
+</aside>
+<!--导航栏-->
+<nav class="nav-1">
+    <!--<div>-->
+        <!--<img class="img-responsive" src="img/nav.jpg" alt="#" />-->
+    <!--</div>-->
+    <div class="container ">
+        <ul class="row text-center" id="content">
+              <li class="col-md-2 col-xs-4 col-sm-2">
+                  <a href="index.html">首页
+				   <p>HOME</p>
+				  </a>             
+              </li>
+              <li class="col-md-2 col-xs-4 col-sm-2"><a href="about.html">关于树人
+			  <p>ABOUT US</p>
+			  </a>
+              </li>
+              <li class="col-md-2 col-xs-4 col-sm-2"><a href="products.html">产品中心
+			  <p>PRODUCTS</p>
+			  </a>
+              </li>
+              <li class="col-md-2 col-xs-4 col-sm-2"><a href="new.html">树人动态
+			   <p>NEWS</p>
+			  </a>
+              </li>
+              <li class="col-md-2 col-xs-4 col-sm-2"><a href="agent.html">招商代理
+			   <p>AGENT</p>
+			  </a>
+              </li>
+              <li class="col-md-2 col-xs-4 col-sm-2"><a href="contact.html">联系我们
+			   <p>CONTACT US</p>
+			  </a>
+              </li>
+        </ul>
+    </div>
+</nav>
+<!--字体及图片-->
+<article>
+    <div class="container text-center">
+        <div class="row jumbotron">
+            <h4>
+               传统文化精髓
+            </h4>
+            <span>—————— Traditional culture ———————</span>
+            <hr/>
+            <h2>树人湖笔介绍</h2>
+            <p>湖笔，与徽墨、宣纸、端砚并称为“文房四宝”，是中华文明悠久灿烂的重要象征。湖笔之乡在善琏镇。<br/>当地有笔祖蒙恬庙。相传秦始皇的大将蒙恬“用枯木为管，鹿毛为柱，羊毛为被（外衣）”，发明了毛笔。<br/>
+                2006年，湖笔制作技艺入选国家非物质文化遗产名录。</p>
+            <a type="button" class="btn" href="about.html">更多内容&nbsp;&nbsp;&gt;&gt;</a>
+        </div>
+        <div class="row index-img">
+            <div class="col-md-3 col-sm-3 col-xs-12">
+                  <p class="index-img1">
+                      <img src="img/bitou(1).png" alt=""/>
+                      <span class="i">
+                            <b>树人湖笔学生专用毛笔</b>
+                            <span>树人湖笔专用毛笔</span>
+                           <span>树人湖笔专用毛笔</span>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <a type="button" class="btn btn-block btn-group-sm" href="products.html">了解详情</a>
+                      </span>
+                  </p>
+                <h3>笔头</h3>
+                <span>尖、齐、圆、健四大特点</span>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-12">s
+                <p class="index-img1">
+                    <img class="bu" src="img/mizige.png" alt=""/>
+                   <span class="i">
+                            <b>树人湖笔学生专用毛笔</b>
+                            <span>树人湖笔专用毛笔</span>
+                           <span>树人湖笔专用毛笔</span>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <a type="button" class="btn btn-block btn-group-sm" href="products.html">了解详情</a>
+                      </span>
+                </p>
+                <h3>水写布</h3>
+                <span>间架结构笔画</span>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-12">
+                <p class="index-img1">
+                    <img class="bu" src="img/shuidie1.png" alt=""/>
+                    <span class="i">
+                            <b>树人湖笔学生专用毛笔</b>
+                            <span>树人湖笔专用毛笔</span>
+                           <span>树人湖笔专用毛笔</span>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <a type="button" class="btn btn-block btn-group-sm" href="products.html">了解详情</a>
+                      </span>
+                </p>
+                <h3>水碟</h3>
+                <span>体积小，易携带</span>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-12">
+                <p class="index-img1">
+                    <img class="bu" src="img/mo-1.png" alt=""/>
+                    <span class="i">
+                            <b>树人湖笔学生专用毛笔</b>
+                            <span>树人湖笔专用毛笔</span>
+                           <span>树人湖笔专用毛笔</span>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <a type="button" class="btn btn-block btn-group-sm" href="products.html">了解详情</a>
+                      </span>
+                </p>
+                <h3>墨汁</h3>
+                <span>不吸墨，适合学生使用</span>
+            </div>
+        </div>
+    </div>
+</article>
+<!--企业动态文字-->
+<div class="container " style="padding:15px 0" >
+    <div class="row text-center">
+        <h4 >企业动态</h4>
+        <span>—————— Enterprise dynamic ———————</span>
+    </div>
+</div>
+<div class="index-middle">
+        <div class="index-middle-zz"></div>
+        <div class="container">
+                <div class="row">
+                    <ul  class="nav nav-tabs" id="tab">
+                        <li data-toggle="tab" class="col-md-4 col-sm-4 col-xs-12">
+                            <a href="#news1">关于树人湖笔</a>
+                        </li>
+                        <li data-toggle="tab" class="col-md-4 col-sm-4 col-xs-12">
+                            <a href="#news2">行业动态</a>
+                        </li>
+                        <li data-toggle="tab" class="col-md-4 col-sm-4 col-xs-12">
+                            <a href="#news3">文化起源</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="tab-content">
+                        <div class=" tab-pane active" id="news1">
+                            <div class="media media-left col-sm-4 col-md-4col-xs-12">
+                                <img src="img/new2.jpg" class="img-responsive" />
+                            </div>
+                            <div class="col-sm-8 col-md-8 col-xs-12">
+                                <h4>树人湖笔简介</h4>
+                                <p>树人湖笔有限公司组织了数十名国内知名的制笔专家和书法专家融合了安徽宣笔、文港文笔笔等各大流派的优点，精心研制的智慧成果。</p>
+                                <a type="button" class="btn" href="about.html">了解详情&nbsp;&nbsp;&gt;&gt;</a>
+                            </div>
+                        </div>
+                        <div class=" tab-pane" id="news2">
+                            <div class=" media media-left col-sm-4 col-md-4 col-xs-12">
+                                <img  src="img/new.jpg" class="img-responsive" />
+                            </div>
+                            <div class="col-sm-8 col-md-8 col-xs-12">
+                                <h4>行业动态</h4>
+                                <p>2015年8月，南昌进贤县文港镇的毛笔制作通过文化部审批，而教育部印发的《中小学书法教育指导纲要》已对学生学习硬笔和毛笔字提出了目标要求。</p>
+                                <a type="button" class="btn" href="about.html">了解详情&nbsp;&nbsp;&gt;&gt;</a>
+                            </div>
+                        </div>
+                        <div class=" tab-pane" id="news3">
+                            <div class="media media-left col-sm-4 col-md-4 col-xs-12">
+                                <img  src="img/new1.jpg" class="img-responsive" />
+                            </div>
+                            <div class=" col-sm-8 col-md-8 col-xs-12">
+                                <h4>文化起源</h4>
+                                <p>秦将蒙恬发明毛笔之说</p>
+                                <a type="button" class="btn" href="about.html">了解详情&nbsp;&nbsp;&gt;&gt;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+</div>
+<!--产品详情-->
+<section>
+    <div class="container">
+        <div class="row text-center">
+            <h4>产品详情</h4>
+            <p>—————— Product details ———————</p>
+        </div>
+        <div class="row text-center index-text">
+            <div class="col-md-3 col-sm-3 col-xs-12">
+                <a href="products.html">
+                    <img class="img-responsive"  src="img/pro-5.jpg" alt="#"/>
+                    <h5>树人湖笔 学生专用毛笔</h5>
+                    <div class="index-zz"></div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-12">
+                <a href="products.html">
+                    <img class="img-responsive" src="img/pro-6.jpg" alt="#"/>
+                    <h5>树人湖笔 学生专用墨汁</h5>
+                    <div class="index-zz"></div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-12">
+                <a href="products.html">
+                    <img class="img-responsive" src="img/pro-7.jpg" alt="#"/>
+                    <h5>树人湖笔 学生专用宣纸</h5>
+                    <div class="index-zz"></div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-12">
+                <a href="products.html">
+                    <img class="img-responsive" src="img/pro-8.jpg" alt="#"/>
+                    <h5>树人湖笔 学生专用砚台</h5>
+                    <div class="index-zz"></div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<!--底部导航-->
+<footer>
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-2  col-sm-3 col-xs-5">
+                <ul class="list-unstyled">
+                    <h4>关于树人</h4>
+                    <li><a href="">公司简介</a></li>
+                    <li><a href="">湖笔由来</a></li>
+                    <li><a href="">品牌文化</a></li>
+                    <li><a href="">社会责任</a></li>
+                    <li><a href="">联系我们</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2  col-sm-3 col-xs-6">
+                <ul class="list-unstyled">
+                    <h4>树人湖笔产品</h4>
+                    <li><a href="">学生专用毛笔</a></li>
+                    <li><a href="">学生专用墨汁</a></li>
+                    <li><a href="">学生专用宣纸</a></li>
+                    <li><a href="">学生专用砚台</a></li>
+                    <li><a href="">专利技术产品</a></li>
+                    <li><a href="">多功能专利水写布</a></li>
+                    <li><a href="">其他学生专用产品</a></li>
+                    <li><a href="">优惠套装</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2  col-sm-3 col-xs-5">
+                <ul class="list-unstyled">
+                    <h4>招商代理</h4>
+                    <li><a href="">竞争优势</a></li>
+                    <li><a href="">代理模式</a></li>
+                    <li><a href="">代理流程</a></li>
+                    <li><a href="">经销网络</a></li>
+                </ul>
+            </div>
+            <div class="foot-list-chat col-md-2  col-sm-3  col-xs-7">
+                <h4>关注官方微信</h4>
+                <img  src="img/ewm.jpg" alt="#"/>
+                <p style="color:#22ac38">微信:shurengongsi</p>
+            </div>
+            <div class="col-md-4  col-sm-12 col-xs-12">
+                <ul class="list-unstyled">
+                    <li>地址:北京市海淀区北四环西路68号左岸工社12层</li>
+                    <li>联系人:王真真</li>
+                    <li>Email：srwhgs@163.com</li>
+                    <li>网 址：www.shurenhubi.com</li>
+                    <li>手 机：13911467427</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12 col-md-6 col-sm-6">
+                <p style="font-size:15pt;padding-top:10px">服务热线：010-82676792</p>
+            </div>
+            <div class="col-md-6  col-sm-6 col-xs-12">
+                <p style="color:#d43f3a;font-size:18pt">招商热线：400 8100 168</p>
+            </div>
+            <div class="col-md-12  col-sm-6 col-xs-12 ">
+                <p style="font-size: 8pt;color:#535353;">
+                    Copyright © 2015版权所有京CIP备案348435DSA号
+                </p>
+            </div>
+        </div>
+    </div>
+
+</footer>
+<!-- 引入js文件 -->
+<script src="js/jquery-1.11.3.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/sr.js"></script>
+</body>
+</html>

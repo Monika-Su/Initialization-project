@@ -1,0 +1,156 @@
+<div id="page-wrapper">
+	<div id="toggleBtn" ng-click="CommonService.toggleBtn()" class="row" style="position:absolute;top:50%;z-index:10;height:100%"><i class="fa fa-angle-left fa-2x"></i></div>
+	<!-- /.row -->
+	<div class="row">
+		<div class="col-lg-12">
+			<label>{{('icem.row.limit'| i18next) + ': ' +  microSiteCount + '/' + microSiteLimit}}</label>
+			<!-- /.panel -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<button type="button" class="btn btn-primary" ng-i18next="icem.add" ng-click="addMicroSite()" ng-disabled="microSiteCount >= microSiteLimit"></button>
+					<button class="btn btn-success btn-lg" id="returnWizard" onclick="returnWizard()" ng-i18next="icem.wizard.setting.complete"
+						style="display:none"></button>
+				</div>
+				<!-- /.panel-heading -->
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="table-responsive">
+								<table ng-table="microSiteTableParams" class="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th ng-i18next="icem.microSite.name"></th>
+											<th ng-i18next="icem.microSite.appId"></th>
+											<th ng-i18next="icem.microSite.appSecret"></th>
+											<th ng-i18next="icem.menu.operation"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-show="isShow">
+											<td width="10%"><input class="form-control" type="text" ng-model="microSiteObj.name" maxlength=30/></td>
+											<td width="10%"><input class="form-control" type="text" ng-model="microSiteObj.appId" maxlength=30/></td>
+											<td width="10%"><input class="form-control" type="text" ng-model="microSiteObj.appSecret" /></td>
+											<td width="5%" style="white-space:nowrap;">
+												<button type="button" class="btn btn-success btn-circle" click-once api-method="saveMicroSite" input-data1="microSiteObj">
+											    		<i class="fa fa-check"></i>
+											    	</button>
+												<button type="button" class="btn btn-warning btn-circle" ng-click="closeMicroSite()">
+											    		<i class="fa fa-times"></i>
+											    	</button>
+											</td>
+										</tr>
+										<tr ng-repeat="x in $data">
+											<td width="10%">
+												<div ng-if="!x.$$edit">{{x.name}}</div>
+												<input ng-if="x.$$edit" class="form-control" type="text" ng-model="x.name" maxlength=30/>
+											</td>
+											<td width="10%">
+												<div ng-if="!x.$$edit">{{x.appId}}</div>
+												<input ng-if="x.$$edit" class="form-control" type="text" ng-model="x.appId" maxlength=30/>
+											</td>
+											<td width="10%">
+												<div ng-if="!x.$$edit">{{x.appSecret}}</div>
+												<input ng-if="x.$$edit" class="form-control" type="text" ng-model="x.appSecret" />
+											</td>
+											<td width="5%" style="white-space: nowrap;">
+												<button ng-if="!x.$$edit" type="button" class="btn btn-primary btn-circle" ng-click="x.$$edit = true">
+														<i class="fa fa-list"></i>
+													</button>
+												<button ng-if="!x.$$edit" type="button" class="btn btn-danger btn-circle" ng-click="deleteMircoSite(x)" popover="{{'icem.delete' | i18next}}"
+													popover-trigger="mouseenter">
+														<i class="fa fa-times"></i>
+													</button>
+												<button ng-if="x.$$edit" type="button" class="btn btn-success btn-circle" click-once api-method="saveMicroSite" input-data1="x">
+											    		<i class="fa fa-check"></i>
+											    	</button>
+												<button ng-if="x.$$edit" type="button" class="btn btn-warning btn-circle" ng-click="cancelMicroSite(x)">
+											    		<i class="fa fa-times"></i>
+											    	</button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!-- /.col-lg-8 (nested) -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.panel-body -->
+			</div>
+			<!-- /.panel -->
+		</div>
+		<!-- /.col-lg-8 -->
+	</div>
+	<!-- /.row -->
+</div>
+
+<script type="text/ng-template" id="editNewMenu.html">
+    <div class="modal-header">
+		<div style="float:right">
+		<button type="button" class="btn btn-primary" click-once api-method="syncMenu" ng-i18next="icem.microSite.sync"></button>
+		</div>
+        <h3 class="modal-title" ng-i18next="icem.microSite.editMicroSite"></h3>
+    </div>
+    <div class="modal-body" style="padding-left:0px;">
+        <div class="container" style="padding-left:0px;">
+        <div class="col-lg-4">
+			<div class="btn-group dropup" is-open="true" ng-repeat="m in menuList" style="position:relative;margin-top:70%;">
+
+				<button type="button" class="btn btn-default dropup-toggle" data-toggle="dropdown" ng-click="selectLv1(m)" style="height:34px;width:90px">
+    				{{m.name}}
+					<span class="caret"></span>
+  				</button>
+
+  				<ul class="dropdown-menu" role="menu">
+                    <li ng-show="(m.subButton == null || m.subButton.length<5) && (m.menuId.length == 0 || m.menuId == null)">
+                        <div class="btn" >
+                            <a href="javascript:void(0);" ng-click="addSubMenu(m)"><i class="fa fa-plus-circle fa-lg"></i></a>
+                        </div>
+                    </li>
+   	 				<li ng-repeat="c in m.subButton">
+						<div class="btn">
+							<a href="javascript:void(0);" ng-click="selectLv2(c,$event)">{{c.name}}</a>
+						</div>
+					</li>
+  				</ul>
+			</div>
+			<div class="btn-group dropup" is-open="true" ng-if="menuList ==null || menuList.length<3" style="position:relative;margin-top:70%;">
+				<button type="button" class="btn btn-default dropup-toggle" data-toggle="dropdown" ng-click="addMenu()" style="height:34px;width:90px">
+    				<i class="fa fa-plus-circle fa-lg"></i>
+  				</button>
+			</div>
+        </div>
+        <div class="col-lg-2">
+                <div>
+                    <div class="row sub_title_bar">
+                        <h4 ng-i18next="icem.microSite.setting" style="display:inline"></h4>
+                    </div>
+						<div class="row">
+							<div class="col-lg-12 bottom-expand" ng-show="isRoot == 1">
+							   <input type="radio" ng-model="rootType" value="0">{{'icem.microSite.menuName' | i18next}}
+							   <input type="radio" ng-model="rootType" value="1">{{'icem.microSite.module' | i18next}}
+							</div>
+                            <div class="col-lg-12 bottom-expand">
+        					   <input ng-show="rootType == 0" ng-model="setMenu.name" maxlength="8" class="form-control"/>
+							   <select ng-show="rootType == 1" ng-model="setMenu" ng-options=" m as m.name for m in menuOption" class="form-control">
+								   <option value="" ng-i18next="icem.choose"></option>
+							   </select>
+                            </div>
+						    <div class="col-lg-12 bottom-expand">
+							   <button ng-show="showBtn" type="button" class="btn btn-primary" ng-click="saveBtn(setMenu,rootType)" ng-i18next="icem.microSite.add"></button>
+							   <button ng-show="showSubBtn" type="button" class="btn btn-primary" ng-click="saveSubMenu(setMenu)" ng-i18next="icem.microSite.add"></button>
+							   <button ng-show="showBtn" type="button" class="btn btn-primary" ng-click="deleteMenu()" ng-i18next="icem.delete"></button>
+                            </div>
+						</div>
+					</div>
+                </div>
+        </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+		<button type="button" class="btn btn-primary" click-once api-method="save" ng-i18next="icem.save"></button>
+		<button type="button" class="btn btn-success" click-once api-method="publish" ng-i18next="icem.microSite.publish"></button>
+		<button type="button" class="btn btn-default" ng-click="cancel()" ng-i18next="icem.close"></button>
+    </div>
+</script>

@@ -1,0 +1,632 @@
+<div id="page-wrapper">
+	<div id="toggleBtn" ng-click="CommonService.toggleBtn()" class="row" style="position:absolute;top:50%;z-index:10;height:100%"><i class="fa fa-angle-left fa-2x"></i></div>
+	<!-- /.row -->
+	<div class="row">
+		<div class="col-lg-12">
+			<!-- /.panel -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<div class="btn-group">
+						<button class="btn btn-menu btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{'icem.add' | i18next}}<span class="caret"></span>
+							</button>
+						<ul class="dropdown-menu" role="menu">
+							<li ng-repeat="x in buttons" ng-click="clickButtonList(x.name)">
+								<a href="">{{x.name | i18next}}</a>
+							</li>
+						</ul>
+					</div>
+					<div class="btn-group">
+						<button type="button" class="btn-menu btn btn-primary dropdown-toggle" data-toggle="dropdown">{{'icem.menu.injection' | i18next}}
+						      	<span class="caret"></span>
+						  	</button>
+						<ul class="dropdown-menu" role="menu">
+							<li ng-repeat="x in injectionMenus" ng-click="newInjection(x)">
+								<a href="">{{x.label}}</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- /.panel-heading -->
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="table-responsive">
+								<table ng-table="menuTableParams" class="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th ng-i18next="icem.menu.name"></th>
+											<th ng-i18next="icem.menu.type"></th>
+											<th ng-i18next="icem.menu.url"></th>
+											<th ng-i18next="icem.operation"></th>
+										</tr>
+									</thead>
+									<tbody id="recordBody">
+										<tr ng-repeat="x in $data">
+											<td>{{x.name}}</td>
+											<td>{{x.type}}</td>
+											<td><a href="{{x.url}}" target="_blank">{{x.url}}</a></td>
+											<td>
+												<button type="button" class="btn btn-primary btn-circle" ng-click="editMenu(x)" popover="{{'icem.edit' | i18next}}" popover-trigger="mouseenter"><i class="fa fa-list"></i></button>
+												<button ng-if="!x.key" type="button" class="btn btn-warning btn-circle" ng-click="deleteMenu(x.id, x.microSiteId)" popover="{{'icem.delete' | i18next}}"
+													popover-trigger="mouseenter"><i class="fa fa-times"></i></button>
+												<button type="button" class="btn btn-info btn-circle" ng-click="editPublicClub(x.id)" popover="{{'icem.microSite.publish' | i18next}}"
+													popover-trigger="mouseenter"><i class="fa fa-cloud-upload"></i></button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!-- /.col-lg-8 (nested) -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.panel-body -->
+			</div>
+			<!-- /.panel -->
+		</div>
+		<!-- /.col-lg-8 -->
+	</div>
+	<!-- /.row -->
+</div>
+
+<!-- rankingModal -->
+<div class="modal fade" id="rankingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" ng-i18next="icem.menu.ranking"></h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<input type="hidden" ng-model="rankingMenu.id">
+					<label ng-i18next="icem.menu.name"></label>
+					<input class="form-control" ng-i18next="[placeholder]icem.menu.ranking.name.placeholder" maxlength="8" ng-model="rankingMenu.name">
+				</div>
+				<div class="form-group">
+					<label ng-i18next="icem.menu.ranking.type"></label><br>
+					<label>
+                          <label for="rankingTypeClick" ng-i18next="icem.menu.type.click"></label><input type="radio"
+						id="rankingTypeClick" name="rankingType" value="1" ng-model="rankingMenu.rankingType" checked>
+					</label>
+					<label>
+                           <label for="rankingTypeConversion" ng-i18next="icem.menu.type.conversion"></label>
+					<input
+						type="radio" id="rankingTypeConversion" name="rankingType" value="2" ng-model="rankingMenu.rankingType">
+						</label>
+				</div>
+				<div class="form-group">
+					<label ng-i18next="icem.menu.ranking.count"></label>(1~20)
+					<input ng-model="rankingMenu.rankingCount" class="form-control" only-number>
+				</div>
+				<div class="form-group">
+					<label ng-i18next="icem.menu.template"></label>
+					<select ng-model="rankingMenu.clubTemplate" ng-selected="rankingMenu.clubTemplate === m.id" ng-options=" m.id as (m.name | i18next) for m in rankingOption"
+						class="form-control"></select>
+				</div>
+				<div class="form-group">
+					<label ng-i18next="icem.menu.group.filter"></label>
+					<input class="form-control" maxlength="150" ng-model="rankingMenu.groupFilter">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" ng-click="clearRanking(rankingMenu)" ng-i18next="icem.clear"></button>
+				<button type="button" class="btn btn-primary" click-once input-data1="rankingMenu" api-method="saveRanking" ng-i18next="icem.save"></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" ng-i18next="icem.close" ng-click="clearRanking(rankingMenu)"></button>
+			</div>
+			<div ng-show="debug" class="debug-info">
+				<pre>form = {{rankingMenu | json}}</pre>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<!-- promotionModal -->
+<div class="modal fade" id="promotionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:80%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" ng-i18next="icem.menu.promotion"></h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<input type="hidden" ng-model="promotionMenu.id">
+					<label ng-i18next="icem.menu.name"></label>
+					<input class="form-control" ng-i18next="[placeholder]icem.menu.promotionMenu.name.placeholder" maxlength="8" ng-model="promotionMenu.name">
+				</div>
+				<div class="form-group">
+					<label ng-i18next="icem.menu.promotion.count"></label>(1~20)
+					<input ng-model="promotionMenu.promotionCount" class="form-control" only-number>
+				</div>
+				<div class="form-group">
+					<label ng-i18next="icem.menu.template"></label>
+					<select ng-model="promotionMenu.clubTemplate" ng-selected="promotionMenu.clubTemplate === m.id" ng-options=" m.id as (m.name | i18next) for m in promotionOption"
+						class="form-control"></select>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<label ng-i18next="icem.menu.promotion.date"></label>
+						<p class="input-group">
+							<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="promotionMenu.promotionStartDate" is-open="openedStart"
+								min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close"
+							/>
+							<span class="input-group-btn">
+			                <button type="button" class="btn btn-default" ng-click="openStart($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+			              </span>
+						</p>
+					</div>
+					<div class="col-md-6">
+						<p class="input-group">
+							<timepicker ng-model="promotionMenu.promotionStartTime" ng-change="" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<label ng-i18next="icem.menu.promotion.date.to"></label>
+						<p class="input-group">
+							<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="promotionMenu.promotionEndDate" is-open="openedEnd"
+								min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close"
+							/>
+							<span class="input-group-btn">
+			                <button type="button" class="btn btn-default" ng-click="openEnd($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+			              </span>
+						</p>
+					</div>
+					<div class="col-md-6">
+						<p class="input-group">
+							<timepicker ng-model="promotionMenu.promotionEndTime" ng-change="" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<label ng-i18next="icem.menu.promotion.date.range"></label>
+						<p class="input-group">
+							<select class="form-control" ng-model="promotionMenu.promotionRangeStart" ng-selected="promotionMenu.promotionRangeStart === opt"
+								ng-options="opt for opt in promotionHourRange">
+                          </select>
+						</p>
+					</div>
+					<div class="col-md-6">
+						<label ng-i18next="icem.menu.promotion.date.to"></label>
+						<p class="input-group">
+							<select class="form-control" ng-model="promotionMenu.promotionRangeEnd" ng-selected="promotionMenu.promotionRangeEnd === opt"
+								ng-options="opt for opt in promotionHourRange">
+                          </select>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12" style="text-align:center;">
+						<div class="table-responsive">
+							<table ng-table="itemTableParams" show-filter="true" class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th ng-i18next="icem.items.check"></th>
+										<th ng-i18next="icem.items.code"></th>
+										<th ng-i18next="icem.items.name"></th>
+										<th ng-i18next="icem.items.price"></th>
+										<th ng-i18next="icem.items.special.price"></th>
+										<th ng-i18next="icem.items.grouping"></th>
+										<th ng-i18next="icem.items.category"></th>
+										<!-- <th ng-i18next="icem.items.image"></th> -->
+										<th ng-i18next="icem.menu.operation"></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td width="5%" header="'ng-table/headers/checkbox.html'">
+											<input type="checkbox" ng-model="checkboxes.checked" id="select_all" name="filter-checkbox" value="" />
+										</td>
+										<td width="10%"></td>
+										<td width="10%"><input class="form-control" type="text" ng-model="filterItems.name" ng-change="filterChange(filterItems)" maxlength="30"/></td>
+										<td width="10%"></td>
+										<td width="10%"></td>
+										<td width="10%"><input class="form-control" type="text" ng-model="filterItems.grouping" ng-change="filterChange(filterItems)" maxlength="30"/></td>
+										<td width="10%"><input class="form-control" type="text" ng-model="filterItems.category" ng-change="filterChange(filterItems)" maxlength="30"/></td>
+										<td width="10%"></td>
+									</tr>
+									<tr ng-repeat="x in $data">
+										<td data-title="getTitle('icem.items.code')">
+											<input ng-if="!x.$$edit" type="checkbox" ng-model="checkboxes.items[x.itemId]" ng-change="checkBoxClick(x,checkboxes.items)"
+											/>
+										</td>
+										<td data-title="getTitle('icem.items.code')">{{x.code}}</td>
+										<td data-title="getTitle('icem.items.name')" filter="{'name':'text'}">
+											<div ng-if="!x.$$edit">{{x.name}}</div>
+											<input ng-if="x.$$edit" class="form-control" type="text" ng-model="x.name" maxlength="30"/>
+										</td>
+										<td data-title="getTitle('icem.items.price')">
+											<div ng-if="!x.$$edit">{{x.price}}</div>
+											<input ng-if="x.$$edit" class="form-control" type="text" ng-model="x.price" maxlength="8" only-float/>
+										</td>
+										<td data-title="getTitle('icem.items.special.price')">
+											<div ng-if="!x.$$edit">{{x.discount}}</div>
+											<input ng-if="x.$$edit" class="form-control" type="text" ng-model="x.discount" maxlength="8" only-float/>
+										</td>
+										<td data-title="getTitle('icem.items.grouping')" filter="{'group':'text'}">
+											<div ng-if="!x.$$edit">{{x.grouping}}</div>
+											<input ng-if="x.$$edit" class="form-control" type="text" ng-model="x.grouping" maxlength="30"/>
+										</td>
+										<td data-title="getTitle('icem.items.category')" filter="{'category':'text'}">
+											<div ng-if="!x.$$edit">{{x.category}}</div>
+											<input ng-if="x.$$edit" class="form-control" type="text" ng-model="x.category" maxlength="30"/>
+										</td>
+										<td data-title="getTitle('icem.menu.operation')" style="white-space:nowrap;">
+											<button ng-if="!x.$$edit" type="button" class="btn btn-primary btn-circle" ng-click="x.$$edit = true"><i class="fa fa-list"></i></button>
+											<button ng-if="x.$$edit" type="button" class="btn btn-success btn-circle" ng-click="saveItem(x)"><i class="fa fa-check"></i></button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" ng-click="clearPromotion(promotionMenu)" ng-i18next="icem.clear"></button>
+				<button type="button" class="btn btn-primary" click-once input-data1="promotionMenu" api-method="savePromotion" ng-i18next="icem.save"></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" ng-i18next="icem.close" ng-click="clearPromotion(promotionMenu)"></button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- personalizedModal -->
+<div class="modal fade" id="personalizedModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" ng-i18next="icem.menu.personalized"></h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<input type="hidden" ng-model="personalizedMenu.id">
+					<label ng-i18next="icem.menu.name"></label>
+					<input class="form-control" ng-i18next="[placeholder]icem.menu.personalized.name.placeholder" maxlength="8" ng-model="personalizedMenu.name">
+				</div>
+				<div class="form-group">
+					<label ng-i18next="icem.menu.personalized.type"></label><br>
+					<label>
+                          <label for="personalizedTypeClick" ng-i18next="icem.menu.type.click"></label><input type="radio"
+						id="personalizedTypeClick" name="personalizedType" value="1" ng-model="personalizedMenu.personalizedType" checked>
+					</label>
+					<label>
+                           <label for="personalizedTypeConversion" ng-i18next="icem.menu.type.conversion"></label>
+					<input
+						type="radio" id="personalizedTypeConversion" name="personalizedType" value="2" ng-model="personalizedMenu.personalizedType">
+						</label>
+				</div>
+				<div class="form-group">
+					<label ng-i18next="icem.menu.personalized.count"></label>(1~20)
+					<input ng-model="personalizedMenu.personalizedCount" class="form-control" only-number>
+				</div>
+				<div class="form-group">
+					<label ng-i18next="icem.menu.template"></label>
+					<select ng-model="personalizedMenu.clubTemplate" ng-selected="personalizedMenu.clubTemplate === m.id" ng-options=" m.id as (m.name | i18next) for m in personalizedOption"
+						class="form-control"></select>
+				</div>
+				<div class="form-group">
+					<label ng-i18next="icem.menu.group.filter"></label>
+					<input class="form-control" maxlength="150" ng-model="personalizedMenu.groupFilter">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" ng-click="clearPersonalized(personalizedMenu)" ng-i18next="icem.clear"></button>
+				<button type="button" class="btn btn-primary" click-once input-data1="personalizedMenu" api-method="savePersonalized" ng-i18next="icem.save"></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" ng-i18next="icem.close" ng-click="clearPersonalized(personalizedMenu)"></button>
+			</div>
+			<div ng-show="debug" class="debug-info">
+				<pre>form = {{personalizedMenu | json}}</pre>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<!-- pointModal -->
+<div class="modal fade" id="pointModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" ng-i18next="icem.menu.point"></h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<input type="hidden" ng-model="pointMenu.id">
+					<label ng-i18next="icem.menu.name"></label>
+					<input class="form-control" ng-i18next="[placeholder]icem.menu.point.name.placeholder" maxlength="8" ng-model="pointMenu.name">
+				</div>
+				<div class="form-group">
+					<label ng-i18next="icem.menu.template"></label>
+					<select ng-model="pointMenu.clubTemplate" ng-selected="pointMenu.clubTemplate === m.id" ng-options=" m.id as (m.name | i18next) for m in pointOption"
+						class="form-control"></select>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" ng-click="clearPoint(pointMenu)" ng-i18next="icem.clear"></button>
+				<button type="button" class="btn btn-primary" click-once input-data1="pointMenu" api-method="savePoint" ng-i18next="icem.save"></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" ng-i18next="icem.close" ng-click="clearPoint(pointMenu)"></button>
+			</div>
+			<div ng-show="debug" class="debug-info">
+				<pre>form = {{pointMenu | json}}</pre>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<!-- reminderModal -->
+<div class="modal fade" id="reminderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" ng-i18next="icem.menu.reminder"></h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<input type="hidden" ng-model="personalizedMenu.id">
+					<label ng-i18next="icem.menu.name"></label>
+					<input class="form-control" ng-i18next="[placeholder]icem.menu.reminder.name.placeholder" maxlength="8" ng-model="reminderMenu.name">
+				</div>
+				<div class="form-group">
+					<label ng-i18next="icem.menu.reminder.count"></label>(1~20)
+					<input ng-model="reminderMenu.reminderCount" class="form-control" only-number>
+				</div>
+				<div class="form-group">
+					<label ng-i18next="icem.menu.template"></label>
+					<select ng-model="reminderMenu.clubTemplate" ng-selected="reminderMenu.clubTemplate === m.id" ng-options=" m.id as (m.name | i18next) for m in reminderOption"
+						class="form-control"></select>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" ng-click="clearReminder(reminderMenu)" ng-i18next="icem.clear"></button>
+				<button type="button" class="btn btn-primary" click-once input-data1="reminderMenu" api-method="saveReminder" ng-i18next="icem.save"></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" ng-i18next="icem.close" ng-click="clearReminder(reminderMenu)"></button>
+			</div>
+			<div ng-show="debug" class="debug-info">
+				<pre>form = {{reminderMenu | json}}</pre>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<!-- customModal -->
+<div class="modal fade" id="customModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" ng-i18next="icem.menu.custom"></h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<input type="hidden" ng-model="customMenu.id">
+					<label ng-i18next="icem.menu.name"></label>
+					<input class="form-control" ng-i18next="[placeholder]icem.menu.custom.name.placeholder" maxlength="8" ng-model="customMenu.name">
+				</div>
+				<div ng-show="false" class="form-group">
+					<label ng-i18next="icem.menu.template"></label>
+					<select ng-model="customMenu.clubTemplate" ng-selected="customMenu.clubTemplate === m.id" ng-options=" m.id as (m.name | i18next) for m in customOption"
+						class="form-control"></select>
+				</div>
+				<div class="form-group">
+					<label ng-i18next="icem.menu.custom.content"></label>
+					<div id="customContentEditor" contenteditable="true">
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" ng-click="clearCustom(customMenu)" ng-i18next="icem.clear"></button>
+				<button type="button" class="btn btn-primary" click-once input-data1="customMenu" api-method="saveCustom" ng-i18next="icem.save"></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" ng-i18next="icem.close" ng-click="clearCustom(customMenu)"></button>
+			</div>
+			<div ng-show="debug" class="debug-info">
+				<pre>form = {{customMenu | json}}</pre>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<!-- injectionModal -->
+<div class="modal fade" id="injectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" ng-i18next="icem.menu.injection"></h4>
+			</div>
+			<div class="modal-body">
+				<!--{{injectionMenu}}	{{injectionOption}}-->
+				<div class="form-group">
+					<input type="hidden" ng-model="injectionMenu.id">
+					<label ng-i18next="icem.menu.name"></label>
+					<input class="form-control" ng-i18next="[placeholder]icem.menu.injection.name.placeholder" maxlength="50" ng-model="injectionMenu.name">
+				</div>
+				<div class="form-group">
+					<label ng-i18next="icem.menu.injection"></label>
+					<input class="form-control" ng-model="injectionMenu.label" readonly>
+				</div>
+				<div class="form-group">
+					<label ng-i18next="icem.menu.template"></label>
+					<select ng-model="injectionMenu.clubTemplate" ng-selected="injectionMenu.clubTemplate === m.id" ng-options=" m.id as (m.name | i18next) for m in injectionOption"
+						class="form-control"></select>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" ng-click="injectionMenu.name = ''" ng-i18next="icem.clear"></button>
+				<button type="button" class="btn btn-primary" click-once input-data1="injectionMenu" api-method="saveInjection" ng-i18next="icem.save"></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" ng-i18next="icem.close" ng-click="closeInjection()"></button>
+			</div>
+			<div ng-show="debug" class="debug-info">
+				<pre>form = {{injectionMenu | json}}</pre>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<!-- registrationModal -->
+<div class="modal fade" id="registrationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" ng-i18next="icem.menu.registration"></h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<input type="hidden" ng-model="registrationMenu.id">
+					<label ng-i18next="icem.menu.name"></label>
+					<input class="form-control" ng-i18next="[placeholder]icem.menu.registration.name.placeholder" maxlength="8" ng-model="registrationMenu.name">
+				</div>
+				<div class="form-group">
+					<label ng-i18next="icem.menu.template"></label>
+					<select ng-model="registrationMenu.clubTemplate" ng-selected="registrationMenu.clubTemplate === m.id" ng-options=" m.id as (m.name | i18next) for m in registrationOption"
+						class="form-control"></select>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" ng-click="clearRegistration(registrationMenu)" ng-i18next="icem.clear"></button>
+				<button type="button" class="btn btn-primary" click-once input-data1="registrationMenu" api-method="saveRegistration" ng-i18next="icem.save"></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" ng-i18next="icem.close" ng-click="clearRegistration(registrationMenu)"></button>
+			</div>
+			<div ng-show="debug" class="debug-info">
+				<pre>form = {{registrationMenu | json}}</pre>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+<!-- publishClubModal -->
+<div class="modal fade" id="publishClubModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title"></h3>
+			</div>
+			<div class="modal-body">
+
+				<ul class="nav nav-tabs nav-justified">
+					<li role="presentation" ng-class="{'active': basicMode}">
+						<a href="javascript:void(0)" ng-click="basicMode = true" ng-i18next="icem.menu.publish.basic"></a>
+					</li>
+					<li role="presentation" ng-class="{'active': !basicMode}">
+						<a href="javascript:void(0)" ng-click="basicMode = false" ng-i18next="icem.menu.publish.advance"></a>
+					</li>
+				</ul>
+
+				<div ng-show="basicMode">
+					<label ng-i18next="icem.microSite.appId"></label>
+					<input class="form-control" ng-model="edit.appId" maxlength="30">
+					<label ng-i18next="icem.microSite.appSecret"></label>
+					<input class="form-control" ng-model="edit.appSecret" maxlength="50">
+					<label ng-i18next="icem.microSite.publicId"></label>
+					<input class="form-control" ng-model="edit.publicId" maxlength="30">
+					<label ng-i18next="icem.microSite.mchId"></label>
+					<input class="form-control" ng-model="edit.mchId" maxlength="30">
+					<label><input type="checkbox" ng-model="security" >{{'icem.menu.publish.security' | i18next}}</label>
+					<label><input type="checkbox" ng-model="registration" >{{'icem.menu.publish.registration' | i18next}}</label>
+				</div>
+
+				<div ng-hide="basicMode">
+					<label ng-i18next="icem.menu.publish.upload.xml"></label>
+					<div>
+						<div ng-file-drop ng-file-select ng-model="configfiles" class="drop-box-fix" ng-file-change="onConfigFileSelect($files)"
+							ng-accept="'*.xml'" drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ng-multiple="false" allow-dir="false">{{'icem.menu.publish.upload.xml.drop.me' | i18next}}</div>
+						<div ng-no-file-drop>{{'icem.menu.publish.upload.xml.not.support' | i18next}}</div>
+						<ul>
+							<li ng-repeat="f in configfiles" style="font:smaller">{{f.name}} - {{f.size}} {{'icem.menu.publish.upload.xml.size.unit' | i18next}}</li>
+						</ul>
+					</div>
+					<label ng-i18next="icem.menu.publish.upload.template"></label>
+					<div>
+						<div ng-file-drop ng-file-select ng-model="zipfiles" class="drop-box-fix" ng-file-change="onZipFileSelect($files)" ng-accept="'template.zip,index.html'"
+							drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ng-multiple="false" allow-dir="false">{{'icem.menu.publish.upload.template.drop.me' | i18next}}</div>
+						<div ng-no-file-drop>{{'icem.menu.publish.upload.xml.not.support' | i18next}}</div>
+						<ul>
+							<li ng-show="zipfileName != ''" style="font:smaller">{{zipfileName}}</li>
+						</ul>
+					</div>
+				</div>
+
+				<div>
+
+					<input type="radio" ng-model="headerType" value="0">{{'icem.menu.publish.upload.logo' | i18next}}
+					<input type="radio" ng-model="headerType" value="1">{{'icem.menu.publish.upload.logo.url' | i18next}}<br/>
+					<div id="headerType" ng-show="headerType == 0">
+						<div ng-file-drop ng-file-select ng-model="logofiles" class="drop-box-fix" ng-file-change="onLogoFileSelect($files, 0)" ng-accept="'image/*'"
+							drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ng-multiple="false" allow-dir="false">{{'icem.menu.publish.upload.logo.drop.me' | i18next}}</div>
+						<div ng-no-file-drop>{{'icem.menu.publish.upload.xml.not.support' | i18next}}</div>
+					</div>
+
+					<div ng-show="headerType == 1">
+						<input class="form-control" ng-model="logoPath">
+					</div>
+
+					<input type="radio" ng-model="footerType" value="0">{{'icem.menu.publish.upload.footer' | i18next}}
+					<input type="radio" ng-model="footerType" value="1">{{'icem.menu.publish.upload.footer.url' | i18next}}<br/>
+					<div id="footerType" ng-show="footerType == 0">
+						<div ng-file-drop ng-file-select ng-model="footerlogofiles" class="drop-box-fix" ng-file-change="onLogoFileSelect($files, 1)"
+							ng-accept="'image/*'" drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ng-multiple="false" allow-dir="false">{{'icem.menu.publish.upload.logo.drop.me' | i18next}}</div>
+						<div ng-no-file-drop>{{'icem.menu.publish.upload.xml.not.support' | i18next}}</div>
+					</div>
+
+					<div ng-show="footerType == 1">
+						<input class="form-control" ng-model="footerlogoPath">
+					</div>
+
+					<input type="radio" ng-model="themeType" value="0">{{'icem.microSite.default' | i18next}}
+					<input type="radio" ng-model="themeType" value="1">{{'icem.microSite.customize' | i18next}}<br/>
+
+					<div ng-show="themeType == 0" class="carousel-demo">
+						<img ng-show="logoPath != ''" ng-src="{{logoPath}}" style="display:block; margin:auto;" />
+						<carousel>
+							<slide ng-repeat="slide in slides" active="slide.active">
+								<img ng-src="{{slide.imgPath}}" style="margin:auto;">
+								<div class="carousel-caption"></div>
+							</slide>
+						</carousel>
+						<img ng-show="footerlogoPath != ''" ng-src="{{footerlogoPath}}" style="display:block; margin:auto;" />
+					</div>
+
+					<div ng-show="themeType == 1">
+						<div ng-file-drop ng-file-select ng-model="files" class="drop-box-fix" drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}"
+							ng-file-change="onFileSelect($files)" ng-multiple="false" allow-dir="false" accept="image/*">
+							{{'icem.microSite.dropImage' | i18next}}
+						</div>
+						<input type="hidden" ng-model="customTemplateId">
+						<div><img ng-show="logoPath != ''" ng-src="{{logoPath}}" /></div>
+						<div><img ng-src="{{customImage}}" /></div>
+					</div>
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" click-once api-method="publish" input-data1="themeType" input-data2="edit"
+					input-data3="basicMode" input-data4="configfiles" ng-i18next="icem.microSite.publish"></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" ng-i18next="icem.close"></button>
+			</div>
+		</div>
+	</div>
+</div>

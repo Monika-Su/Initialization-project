@@ -1,0 +1,156 @@
+<div id="page-wrapper">
+	<div class="row toggleBtn" ng-click="CommonService.toggleBtn()"><i class="fa fa-angle-left fa-2x"></i></div>
+	<!-- /.row -->
+	<div class="row">
+		<div class="col-lg-12">
+			<!-- /.panel -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<button class="btn btn-primary " ng-click="addRow()" ng-i18next="icem.add"></button>
+					<!-- image uploads -->
+					<div ng-file-drop ng-file-select ng-model="batchFile" class="drop-box" drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}"
+						ng-file-change="onBatchImageUpload($files)" ng-multiple="false" allow-dir="false" accept="*.zip" style="width: 30%;float:right">
+						<p>{{'icem.items.batchUpload' | i18next}}</p>
+					</div>
+					<div ng-file-drop ng-file-select ng-model="batchFile" class="drop-box" drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}"
+						ng-file-change="onBatchFileUpload($files)" ng-multiple="false" allow-dir="false" accept="*.xlsx,*.csv" style="width: 30%;float:right">
+						<p>{{'icem.items.batchDataUpload' | i18next}}</p>
+					</div>
+
+				</div>
+				<!-- /.panel-heading -->
+				<div class="panel-body">
+					<div class="row">
+						<div class="sk-fading-circle" ng-show="isLoading">
+							<div class="sk-circle1 sk-circle"></div>
+							<div class="sk-circle2 sk-circle"></div>
+							<div class="sk-circle3 sk-circle"></div>
+							<div class="sk-circle4 sk-circle"></div>
+							<div class="sk-circle5 sk-circle"></div>
+							<div class="sk-circle6 sk-circle"></div>
+							<div class="sk-circle7 sk-circle"></div>
+							<div class="sk-circle8 sk-circle"></div>
+							<div class="sk-circle9 sk-circle"></div>
+							<div class="sk-circle10 sk-circle"></div>
+							<div class="sk-circle11 sk-circle"></div>
+							<div class="sk-circle12 sk-circle"></div>
+						</div>
+						<div class="col-lg-12" ng-hide="isLoading">
+							<div class="table-responsive">
+								<table ng-table="tableParams" class="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th ng-i18next="icem.items.code"></th>
+											<th ng-i18next="icem.items.name"></th>
+											<th ng-i18next="icem.items.price"></th>
+											<th ng-i18next="icem.items.grouping"></th>
+											<th ng-i18next="icem.items.category"></th>
+											<th ng-i18next="icem.items.effective"></th>
+											<th ng-i18next="icem.items.expires"></th>
+											<th ng-i18next="icem.items.image"></th>
+											<th ng-i18next="icem.status"></th>
+											<th ng-repeat="alias in itemAlias" ng-show="alias.status">
+												{{alias.name}}
+											</th>
+											<th ng-i18next="icem.operation"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<!-- table filter -->
+										<tr>
+											<td width="5%">
+												<div class="input-group input-group-sm search-control dropdown-menu header-drop-search search-width">
+													<span class="input-group-addon header-drop-search">
+										                <span class="glyphicon glyphicon-search"></span>
+													</span>
+													<input class="form-control" type="text" ng-model="items.code" ng-change="filterChange(items)" maxlength="30"/>
+												</div>
+											</td>
+											<td width="10%"><input class="form-control" type="text" ng-model="items.name" ng-change="filterChange(items)" maxlength="30"/></td>
+											<td width="5%"></td>
+											<td width="10%"><input class="form-control" type="text" ng-model="items.grouping" ng-change="filterChange(items)" maxlength="30"/></td>
+											<td width="10%"><input class="form-control" type="text" ng-model="items.category" ng-change="filterChange(items)" maxlength="30"/></td>
+											<td width="10%"></td>
+											<td width="10%"></td>
+											<td width="10%"></td>
+											<td width="10%"></td>
+											<td ng-repeat="alias in itemAlias" ng-show="alias.status"></td>
+											<td width="8%"></td>
+										</tr>
+										<tr ng-show="isShow">
+											<td width="5%"><input class="form-control" type="text" ng-model="itemAttr.code" maxlength="30"/></td>
+											<td width="10%"><input class="form-control" type="text" ng-model="itemAttr.name" maxlength="30"/></td>
+											<td width="5%"><input class="form-control" type="text" ng-model="itemAttr.price" maxlength="8" only-float/></td>
+											<td width="10%"><input class="form-control" type="text" ng-model="itemAttr.grouping" maxlength="30"/></td>
+											<td width="10%"><input class="form-control" type="text" ng-model="itemAttr.category" maxlength="30"/></td>
+											<td width="10%">
+												<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="itemAttr.startDate" ng-click="openedEffective = true"
+													is-open="openedEffective" datepicker-options="dateOptions" close-text="Close" />
+											</td>
+											<td width="10%">
+												<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="itemAttr.endDate" ng-click="openedExpires = true"
+													is-open="openedExpires" datepicker-options="dateOptions" close-text="Close" />
+											</td>
+											<td width="10%"></td>
+											<td width="10%"></td>
+											<td ng-repeat="alias in itemAlias" ng-show="alias.status"><input class="form-control" type="text" ng-model="itemAttr.attributes[alias.subType]" maxlength="30"/></td>
+											<td style="white-space:nowrap;">
+												<button type="button" class="btn btn-success btn-circle" click-once input-data1="itemAttr" api-method="saveItem"><i class="fa fa-check"></i></button>
+												<button type="button" class="btn btn-danger btn-circle" ng-click="removeRow()"><i class="fa fa-times"></i></button>
+											</td>
+										</tr>
+										<tr ng-repeat="x in $data">
+											<td width="5%">{{x.code}}</td>
+											<td width="10%" ng-if="!x.$$edit">{{x.name}}</td>
+											<td width="10%" ng-if="x.$$edit"><input class="form-control" type="text" ng-model="x.name" maxlength="30"/></td>
+											<td width="5%" ng-if="!x.$$edit">{{x.price}}</td>
+											<td width="5%" ng-if="x.$$edit"><input class="form-control" type="text" ng-model="x.price" maxlength="8" only-float/></td>
+											<td width="10%" ng-if="!x.$$edit">{{x.grouping}}</td>
+											<td width="10%" ng-if="x.$$edit"><input class="form-control" type="text" ng-model="x.grouping" maxlength="30"/></td>
+											<td width="10%" ng-if="!x.$$edit">{{x.category}}</td>
+											<td width="10%" ng-if="x.$$edit"><input class="form-control" type="text" ng-model="x.category" maxlength="30"/></td>
+											<td width="10%" ng-if="!x.$$edit"><input class="form-control" type="text" ng-model="x.startDate" datepicker-popup="{{format}}" readonly/></td>
+											<td width="10%" ng-if="x.$$edit"><input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="x.startDate" ng-click="openedExpires = true"
+													is-open="openedExpires" datepicker-options="dateOptions" date-disabled="false" close-text="Close" /></td>
+											<td width="10%" ng-if="!x.$$edit"><input class="form-control" type="text" ng-model="x.endDate" datepicker-popup="{{format}}" readonly/></td>
+											<td width="10%" ng-if="x.$$edit"><input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="x.endDate" ng-click="openedExpires = true"
+													is-open="openedExpires" datepicker-options="dateOptions" date-disabled="false" close-text="Close" /></td>
+											<td width="10%" ng-if="!x.$$edit">
+												<img ng-if="!(x.img.indexOf('null?r=') > -1)" ng-src="{{x.img}}" width="50px" height="50px" />
+												<div ng-if="x.img.indexOf('null?r=') > -1" ng-file-drop ng-file-select ng-model="files" class="drop-box" drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}"
+													ng-file-change="onFileSelect(x,$files)" ng-multiple="true" allow-dir="true" accept="image/*">
+													{{'icem.items.dropImage' | i18next}}
+												</div>
+											</td>
+											<td width="10%" ng-if="x.$$edit">
+												<div ng-file-drop ng-file-select ng-model="files" class="drop-box" drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}"
+													ng-file-change="onFileSelect(x,$files)" ng-multiple="false" allow-dir="false" accept="image/*">
+													{{'icem.items.dropImage' | i18next}}
+												</div>
+											</td>
+											<td width="10%">{{(x.inUse ? "icem.inUse" : "icem.notInUse" ) | i18next}}</td>
+											<td width="5%" ng-if="!x.$$edit" ng-repeat="alias in itemAlias" style="word-break:break-all;" ng-show="alias.status">{{x.attributes[alias.subType]}}</td>
+											<td width="5%" ng-if="x.$$edit" ng-repeat="alias in itemAlias" ng-show="alias.status"><textarea class="form-control" ng-model="x.attributes[alias.subType]" maxlength="400"></textarea></td>
+											<td width="8%" style="white-space:nowrap;">
+												<button ng-if="!x.$$edit" type="button" class="btn btn-primary btn-circle" ng-click="editItem(x)"><i class="fa fa-list"></i></button>
+												<button ng-if="!x.$$edit && !x.inUse" type="button" class="btn btn-danger btn-circle" ng-click="deleteItem(x)"><i class="fa fa-times"></i></button>
+												<button ng-if="x.$$edit" type="button" class="btn btn-success btn-circle" click-once input-data1="x" api-method="saveItem"><i class="fa fa-check"></i></button>
+												<button ng-if="x.$$edit" type="button" class="btn btn-warning btn-circle" ng-click="cancelSaveItem(x)"><i class="fa fa-times"></i></button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!-- /.col-lg-8 (nested) -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.panel-body -->
+			</div>
+			<!-- /.panel -->
+		</div>
+		<!-- /.col-lg-8 -->
+	</div>
+	<!-- /.row -->
+</div>

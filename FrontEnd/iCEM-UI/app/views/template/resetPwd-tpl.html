@@ -1,0 +1,29 @@
+<div id="resetPwdModal">
+                <div class="modal-header">
+                    <h3 class="modal-title" ng-i18next="icem.menu.operator.reset.password"></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                    	<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 text-center">
+	                        <label ng-i18next="icem.newPassword"></label>
+                        </div>
+                        <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+							<!-- disable firefox autocomplete - use another input display:none -->
+							<input class="form-control" id="typeNew" type="password" maxlength="15" style="display:none;" autocomplete="off"/>
+                            <input class="form-control" id="typeNew" type="password" maxlength="15" ng-model="changePwd.newPassword" autocomplete="off"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                    	<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 text-center">
+	                        <label ng-i18next="icem.newPassword.again"></label>
+                        </div>
+                        <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                            <input class="form-control" type="password" maxlength="15" ng-model="changePwd.again" autocomplete="off"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="cancel()" ng-i18next="icem.cancel"></button>
+                    <button type="button" class="btn btn-primary" ng-i18next="icem.ok" ng-click="confirmResetPwd(changePwd)"></button>
+                </div>
+    </div>

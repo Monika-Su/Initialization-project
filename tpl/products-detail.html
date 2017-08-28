@@ -1,0 +1,142 @@
+<div ng-include="'tpl/include/header_pro.html'"></div>
+    <div class="container">
+        <div class="row">
+            <br/>
+            <ol class="breadcrumb col-md-9 col-sm-9 col-xs-6">
+                <li><a href="#/products-detail">产品列表</a></li>
+                <li class="active"><a href="#/products-detail-m">产品详情</a></li>
+            </ol>
+            <div class="form-group has-feedback col-md-3 col-sm-3 col-xs-6 ">
+                <input  ng-model="kw" type="text" class="form-control" placeholder="请输入产品名称或者原材料"/>
+                <span class="form-control-feedback glyphicon"></span>
+            </div>
+            <hr/>
+        </div>
+        <div class="row">
+            <div class="panel-group col-md-3 col-sm-3 col-xs-6 text-center" id="accordion">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h4 class="panel-title active">
+                            <a data-toggle="collapse"data-parent="#accordion" href="#collapseOne">
+                                树人湖笔专用毛笔 </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <ul>
+                                <li><a href="#/products-detail-m">树人湖笔双头专利毛笔</a></li>
+                                <li><a href="#/products-detail-m">树人湖笔狼毫</a></li>
+                                <li><a href="#/products-detail-m">树人湖笔兼毫</a></li>
+                                <li><a href="#/products-detail-m">树人湖笔羊毫</a></li>
+                                <li><a href="#/products-detail-m">树人湖笔兼毫</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse"  data-parent="#accordion" href="#collapseTwo">
+                                树人湖笔专用墨汁 </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <ul>
+                                <li><a href="">树人湖笔专用墨汁100ml</a></li>
+                                <li><a href="">树人湖笔专用墨汁200ml</a></li>
+                                <li><a href="">树人湖笔专用墨汁250ml</a></li>
+                                <li><a href="">树人湖笔专用墨汁500ml</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                树人湖笔专用宣纸 </a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <ul>
+                                <li><a href="">树人湖笔同步练习册</a></li>
+                                <li><a href="">树人湖笔同步练习薄</a></li>
+                                <li><a href="">树人湖笔描红作业本</a></li>
+                                <li><a href="">树人湖笔学生专用描边纸</a></li>
+                                <li><a href="">树人湖笔同步练习册</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse"  data-parent="#accordion" href="#collapsefour">
+                                树人湖笔专用砚台 </a>
+                        </h4>
+                    </div>
+                    <div id="collapsefour" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <ul>
+                                <li><a href="">树人湖笔学生专用方正砚台</a></li>
+                                <li><a href="">树人湖笔学生专用圆形砚台</a></li>
+                                <li><a href="">树人湖笔学生专用水碟</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse"  data-parent="#accordion" href="#collapsefive">
+                                树人湖笔多功能专利水写布 </a>
+                        </h4>
+                    </div>
+                    <div id="collapsefive" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <ul>
+                                <li><a href="">树人湖笔多功能专利水写布4张</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-pic col-md-9 col-sm-9 col-xs-12">
+                    <div class="row">
+                        <a href="#/products-detail-m/{{dish.did}}" ng-repeat="dish in dishList" >
+                            <div class="col-md-3 col-sm-3 col-xs-6" >
+                                <!--<a class="list-group-item " href="" >-->
+                                <div class="detail-zz text-center ">
+                                    <h5>{{dish.material}}</h5>
+                                    <p>{{dish.detail}}</p>
+                                    <p>{{dish.detail_1}}</p>
+                                    <p>{{dish.price}}</p>
+                                    <button class="btn" ng-click="jump('#/products-detail/{{dish.did}')">了解更多</button>
+                                </div>
+                                    <img class="img-responsive" ng-src="img/{{dish.img_sm}}" alt=""/>
+                                <!--</a>-->
+                             </div>
+                        </a>
+                    </div>
+                    <div class="row text-center">
+                        <!-- TODO 利用按钮组组件完成分页效果 -->
+                        <div class="btn-group">
+                            <a class="btn btn-default" href="#">
+                                <span>&laquo;</span>
+                            </a>
+                            <button class="btn btn-default" ng-click="jump('#/products_detail')"
+                                    >1</button>
+                            <button class="btn btn-default"  ng-click="moreLoad()"
+                                    >2</button>
+                            <a class="btn btn-default" href="">
+                                <span>&raquo;</span>
+                            </a>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+<!--引入底部导航-->
+<div ng-include="'tpl/include/footer.html'"></div>

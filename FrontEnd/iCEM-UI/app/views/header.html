@@ -1,0 +1,95 @@
+<nav class="navbar navbar-default navbar-clear-default">
+    <!--<nav class="navbar navbar-default navbar-fixed-top">-->
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" id="topExpandBtn" data-toggle="collapse" data-target="#myNavbar" ng-if="cSite && cSite.id !== 0">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" ng-class="{'logo-title': !seeBroswer(),'logo-title-notChrome':seeBroswer()}">
+                <img src="images/logo_op.png" width="37px" style="display:inline;"> 
+                {{'page.title' | i18next}}
+            </a>
+        </div>
+        <div class="navbar-header btn-group site-group" role="group" ng-if="cSite && cSite.id !== 0">
+            <a href="" class="site-label btn btn-lg dropdown-toggle" id="topExpandTarget" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                ng-click="sitequery = '';">
+              {{cSite.name}} <span class="caret"></span>
+            </a>
+            <ul class="dropdown-fit dropdown-menu dropdown-messages">
+                <!-- search box -->
+                <li role="presentation">
+                    <div class="input-group input-group-sm search-control dropdown-menu header-drop-search">
+                        <span class="input-group-addon header-drop-search">
+                     <span class="glyphicon glyphicon-search"></span>
+                        </span>
+                        <input type="text" class="form-control header-drop-search" placeholder="Search Site" ng-model="sitequery"></input>
+                    </div>
+                </li>
+                <!-- / search box -->
+                <div ng-repeat="site in siteList | filter : {name: sitequery} track by $index" ng-click="clickSite(site)">
+                    <a href="">
+                        <li>
+                            <strong class="site-label-dropdown">{{site.name}}</strong>
+                            <i class="fa-right fa fa-caret-right"></i>
+                        </li>
+                    </a>
+                </div>
+            </ul>
+        </div>
+
+        <div id="top-rightInfo" class="right">
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown" popover="{{'icem.helper.popover' | i18next}}" popover-trigger="mouseenter" popover-placement="bottom"
+                    ng-if="cSite && cSite.id !== 0">
+                    <a href="" helper-link ng-click="openHelper()" class="headertext"> <i class="fa fa-book fa-lg fa-fw"></i>
+                    </a>
+                </li>
+                <!-- apply config -->
+                <li ng-if="false" class="dropdown" popover="{{'icem.apply.config.popover' | i18next}}" popover-trigger="mouseenter" popover-placement="bottom">
+                    <apply-dialog></apply-dialog>
+                </li>
+                <!-- user function -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle headertext" data-toggle="dropdown" href="">
+                        <i class="fa fa-lg fa-cog fa-fw"></i>
+                        <i class="fa fa-lg fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user gear-menu">
+                        <li ng-if="cSite && cSite.id !== 0"><a>{{'account.info.expired' | i18next}} : {{cSite.autoRenew ? ('account.never.expired' | i18next) : cSite.expired }}</a></li>
+                        <li ng-if="cSite && cSite.id !== 0"><a>{{'account.info.domain' | i18next}} : {{cSite.domain}}</a></li>
+
+                        <li class="divider" ng-if="cSite && cSite.id !== 0"></li>
+
+                        <li><a href="" ng-click="resetPwd()"><i class="fa fa-user fa-fw"></i> <label
+                                ng-i18next="icem.menu.operator.reset.password" ></label></a></li>
+                        <li><a href="" ng-click="logOut()"><i
+                                class="fa fa-sign-out fa-fw"></i> <label
+                                ng-i18next="table.header.user.logout"></label></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav" role="tablist">
+                <li role="presentation" ng-click="clickSidebar();clickMenu(menu)" ng-repeat="menu in injectionMenu" ng-class="{ active: menu.active}">
+                    <a href="#/{{menu.subFunctions.length > 0 ? menu.subFunctions[0].url : menu.url }}" >{{menu.name | i18next}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div id="menuBar" class="sidebar" role="navigation" ng-if="cSite && cSite.id !== 0">
+    <div class="sidebar-nav navbar-collapse pagetop">
+        <ul class="nav in" id="side-menu">
+            <li ng-repeat="sub in subFunctions" ng-click="clickSidebar()">
+                <a href="#/{{sub.url}}" ng-class="{active: currentPath == sub.url}">
+                  &nbsp;<span ng-i18next="{{sub.name}}"></span></a>
+            </li>
+        </ul>
+    </div>
+</div>

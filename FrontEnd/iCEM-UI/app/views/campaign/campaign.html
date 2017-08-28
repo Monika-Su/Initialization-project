@@ -1,0 +1,257 @@
+<div id="page-wrapper">
+	<div class="row toggleBtn" ng-click="CommonService.toggleBtn()"><i class="fa fa-angle-left fa-2x"></i></div>
+	<!-- /.row -->
+	<div class="row">
+		<div class="sk-fading-circle" ng-show="isLoading">
+			<div class="sk-circle1 sk-circle"></div>
+			<div class="sk-circle2 sk-circle"></div>
+			<div class="sk-circle3 sk-circle"></div>
+			<div class="sk-circle4 sk-circle"></div>
+			<div class="sk-circle5 sk-circle"></div>
+			<div class="sk-circle6 sk-circle"></div>
+			<div class="sk-circle7 sk-circle"></div>
+			<div class="sk-circle8 sk-circle"></div>
+			<div class="sk-circle9 sk-circle"></div>
+			<div class="sk-circle10 sk-circle"></div>
+			<div class="sk-circle11 sk-circle"></div>
+			<div class="sk-circle12 sk-circle"></div>
+		</div>
+		<div class="col-lg-12" ng-hide="isLoading">
+			<!-- /.panel -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<button class="btn btn-primary" ng-click="addRow()" ng-i18next="icem.add"></button>
+					<div ng-file-drop ng-file-select ng-model="batchFile" class="drop-box" drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}"
+						ng-file-change="onCampaignFileSelect($files)" ng-multiple="false" allow-dir="false" accept="*.csv,*.txt" style="width: 300px;float:right">
+						<p>{{'icem.uploadCsv' | i18next}}</p>
+					</div>
+				</div>
+				<!-- /.panel-heading -->
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="table-responsive insideDropdown">
+								<table ng-table="campaignTableParams" class="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th ng-i18next="icem.campaign.name"></th>
+											<th ng-i18next="icem.campaign.dsp"></th>
+											<th ng-i18next="icem.campaign.dspclient"></th>
+											<th ng-i18next="icem.campaign.dspcampaign"></th>
+											<th ng-i18next="icem.campaign.mediatype"></th>
+											<th ng-i18next="icem.campaign.category"></th>
+											<th ng-i18next="icem.campaign.startDate"></th>
+											<th ng-i18next="icem.campaign.endDate"></th>
+											<th ng-i18next="icem.operation"></th>
+										</tr>
+									</thead>
+									<tbody>
+										<!-- add new campain -->
+										<tr ng-show="isShow">
+											<td width="13%"><input class="form-control" type="text" ng-model="newCampaign.name" maxlength=30/></td>
+											<td width="7%">
+												<select ng-model="newCampaign.dspchannel" ng-options="m as (m | i18next) for m in DSP" class="form-control custom"></select>
+											</td>
+											<td width="10%"><input class="form-control" type="text" ng-model="newCampaign.dspclient" maxlength=30/></td>
+											<td width="10%"><input class="form-control" type="text" ng-model="newCampaign.dspcampaign" maxlength=30/></td>
+											<td width="8%">
+												<select ng-model="newCampaign.mediaType" ng-init="newCampaign.mediaType = media[1]" ng-options="m for m in media" class="form-control custom"></select>
+											</td>
+											<td width="14%">
+												<div class="dropdown">
+													<button class="btn btn-default" id="DropdownButton" type="button" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown">{{selectedCategory}}
+  																<span class="caret"></span>
+																</button>
+													<ul class="dropdown-menu" aria-labelledby="DropdownButton">
+														<li role="presentation">
+															<div class="input-group input-group-sm search-control dropdown-menu header-drop-search">
+																<span class="input-group-addon header-drop-search">
+	                                           <span class="glyphicon glyphicon-search"></span>
+																</span>
+																<input type="text" class="form-control header-drop-search" placeholder="Search Category" ng-model="catequery"></input>
+															</div>
+														</li>
+														<li class="dropdown dropdown-submenu" ng-repeat="item in category | filter : {name: catequery}">
+															<a class="dropdown-toggle" ng-mouseover="onCategory(item,true)" ng-mouseleave="onCategory(item,false)" ng-click="clickCategory(item);onCategory(item,false)"
+																ng-class="{'right-arrow': item.subCategory.length > 0}">{{item.name}}</a>
+															<ul class="dropdown dropdown-menu" ng-mouseover="onCategory(item,true)" ng-mouseleave="onCategory(item,false)" ng-show="item.showSub && item.subCategory.length > 0">
+																<li class="dropdown dropdown-submenu" ng-repeat="subitem in item.subCategory">
+																	<a class="dropdown-toggle" ng-click="clickCategory(subitem);onCategory(item,false)">{{subitem.name}}</a>
+																</li>
+															</ul>
+
+														</li>
+													</ul>
+												</div>
+											</td>
+											<td width="7%">
+												<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="newCampaign.startDate" ng-click="openedStart = true"
+													is-open="openedStart" datepicker-options="dateOptions" close-text="Close" />
+											</td>
+											<td width="7%">
+												<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="newCampaign.endDate" ng-click="openedEnd = true"
+													is-open="openedEnd" datepicker-options="dateOptions" close-text="Close" />
+											</td>
+											<td width="12%" style="white-space:nowrap;">
+												<button type="button" class="btn btn-success btn-circle" click-once api-method="saveCampaign" input-data1="newCampaign"><i class="fa fa-check"></i></button>
+												<button type="button" class="btn btn-danger btn-circle" ng-click="removeRow(newCampaign)"><i class="fa fa-times"></i></butto>
+											    </td>
+										</tr>
+										<tr ng-repeat="x in $data">
+											<td width="13%">
+										    	<span ng-if="!x.$$edit">{{x.name}}</span>
+										    	<div ng-if="x.$$edit" ><input class="form-control" type="text" ng-model="x.name" maxlength="50" /></div>
+											</td>
+										   	<td width="7%">
+										    	<span ng-if="!x.$$edit">{{x.dspchannel}}</span>
+										    	<div ng-if="x.$$edit" >
+										        	<select ng-model="x.dspchannel" ng-options="m as (m | i18next) for m in DSP"  class="form-control custom"></select>
+										    	</div>
+										    </td>
+										    <td width="10%">
+										    	<span ng-if="!x.$$edit">{{x.dspclient}}</span>
+										    	<div ng-if="x.$$edit" ><input class="form-control" type="text" ng-model="x.dspclient" maxlength="50" /></div>
+										    </td>
+										    <td width="10%">
+										             <span ng-if="!x.$$edit">{{x.dspcampaign}}</span>
+										             <div ng-if="x.$$edit" ><input class="form-control" type="text" ng-model="x.dspcampaign" maxlength="50" /></div>
+										    </td>
+										   	<td width="8%">
+										    	<span ng-if="!x.$$edit">{{x.mediaType}}</span>
+										    	<div ng-if="x.$$edit" >
+										    		<select ng-model="x.mediaType" ng-options="m for m in media"  class="form-control custom"></select>
+										        </div>
+										    </td>
+										   	<td width="14%">
+												<span ng-if="!x.$$edit">{{x.categoryName}}</span>
+												<div ng-if="x.$$edit" >
+													<div class="dropdown">
+														<button class="btn btn-default" id="DropdownButton" type="button" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown">{{selectedCategory}}
+														<span class="caret"></span>
+														</button>
+												<ul class="dropdown-menu">
+													<li role="presentation">
+														<div class="input-group input-group-sm search-control dropdown-menu header-drop-search">
+															<span class="input-group-addon header-drops-search">
+																		<span class="glyphicon glyphicon-search"></span>
+															</span>
+															<input type="text" class="form-control header-drop-search" placeholder="Search Category" ng-model="catequery"></input>
+														</div>
+													</li>
+													<li class="dropdown dropdown-submenu" ng-repeat="item in category | filter : {name: catequery}">
+														<a class="dropdown-toggle" ng-mouseover="onCategory(item,true)" ng-mouseleave="onCategory(item,false)" ng-click="clickCategory(item,x);onCategory(item,false)"
+															ng-class="{'right-arrow': item.subCategory.length > 0}">{{item.name}}</a>
+														<ul class="dropdown dropdown-menu" ng-mouseover="onCategory(item,true)" ng-mouseleave="onCategory(item,false)" ng-show="item.showSub && item.subCategory.length > 0">
+															<li class="dropdown dropdown-submenu" ng-repeat="subitem in item.subCategory">
+																<a class="dropdown-toggle" ng-click="clickCategory(subitem,x);onCategory(item,false)">{{subitem.name}}</a>
+															</li>
+														</ul>
+													</li>
+												</ul>
+							</div>
+						</div>
+						</td>
+						<td width="7%" ng-if="!x.$$edit">
+							<input class="form-control" type="text" ng-model="x.startDate" datepicker-popup="{{format}}" readonly />
+						</td>
+						<td width="7%" ng-if="x.$$edit">
+							<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="x.startDate" ng-click="openedStart = true"
+								is-open="openedStart" datepicker-options="dateOptions" date-disabled="false" close-text="Close" />
+						</td>
+						<td width="7%" ng-if="!x.$$edit">
+							<input class="form-control" type="text" ng-model="x.endDate" datepicker-popup="{{format}}" readonly/>
+						</td>
+						<td width="7%" ng-if="x.$$edit">
+							<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="x.endDate" ng-click="openedEnd = true" is-open="openedEnd"
+								datepicker-options="dateOptions" date-disabled="false" close-text="Close" />
+						</td>
+						<td width="12%">
+							<button ng-if="!x.$$edit" type="button" class="btn btn-primary btn-circle" ng-click="editCampaign(x)"><i class="fa fa-list"></i></button>
+							<button ng-if="!x.$$edit" type="button" class="btn btn-info btn-circle" ng-click="copyCampaign(x)" popover-placement="top"
+								popover="{{ 'icem.campaign.copy' | i18next}}" popover-trigger="mouseenter"><i class="fa fa-files-o"></i></button>
+							<button ng-if="x.$$edit" type="button" class="btn btn-success btn-circle" ng-click="saveCampaign(x)"><i class="fa fa-check"></i></button>
+							<button ng-if="!x.$$edit" type="button" class="btn btn-danger btn-circle" ng-click="deleteCampaign(x)"><i class="fa fa-times"></i></button>
+							<button ng-if="x.$$edit" type="button" class="btn btn-warning btn-circle" ng-click="cancelSaveCampaign(x)"><i class="fa fa-times"></i></button>
+							<button ng-if="!x.$$edit" type="button" class="btn btn-default btn-circle" ng-click="uploadListCampaign(x)" popover-placement="top"
+								popover="{{ 'icem.campaign.uploadDetail' | i18next}}" popover-trigger="mouseenter"><i class="fa fa-table"></i></button>
+						</td>
+						</tr>
+						</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- /.col-lg-8 (nested) -->
+			</div>
+			<!-- /.row -->
+		</div>
+		<!-- /.panel-body -->
+	</div>
+	<!-- /.panel -->
+</div>
+<!-- /.col-lg-8 -->
+</div>
+<!-- /.row -->
+</div>
+
+<!-- Recommend Config -->
+<div class="modal fade" id="uploadListModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 60%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">{{ ('icem.menu.campaign'| i18next) + ' - ' + selectedCampaign.name }}</h4>
+			</div>
+			<div class="modal-body">
+				<label>{{('icem.campaign.uploadDetail'| i18next) + ' : ' +  selectedCampaign.total}}</label>
+				<div class="table-responsive" style="height: 500px;">
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th ng-i18next="icem.campaign.dsp"></th>
+								<th ng-i18next="icem.campaign.dspclient"></th>
+								<th ng-i18next="icem.menu.campaign"></th>
+								<th ng-i18next="icem.campaign.dspcampaign"></th>
+								<th ng-i18next="icem.campaign.date"></th>
+								<th ng-i18next="icem.campaign.dailyBudgetGoal"></th>
+								<th ng-i18next="report.type.goal.ctr"></th>
+								<th ng-i18next="report.type.goal.cpc"></th>
+								<th ng-i18next="report.type.goal.cpm"></th>
+								<th ng-i18next="report.type.goal.cpv"></th>
+								<th ng-i18next="icem.campaign.budgetMarkup"></th>
+								<th ng-i18next="icem.campaign.budgetMarkupType"></th>
+								<th ng-i18next="icem.campaign.impressionMarkup"></th>
+								<th ng-i18next="icem.campaign.impressionMarkupType"></th>
+								<th ng-i18next="icem.campaign.clickMarkup"></th>
+								<th ng-i18next="icem.campaign.clickMarkupType"></th>
+								<th ng-i18next="icem.campaign.videoMarkup"></th>
+								<th ng-i18next="icem.campaign.videoMarkupType"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="c in campaignObject">
+								<td witdth="5%">{{ c.dsp }}</td>
+								<td witdth="5%" style="white-space: nowrap;">{{ c.client }}</td>
+								<td witdth="5%">{{ c.campaign }}</td>
+								<td witdth="5%">{{ c.campaignId }}</td>
+								<td witdth="5%">{{ c.campaignDate | date:'yyyy/MM/dd' }}</td>
+								<td witdth="5%">{{ c.dailyBudgetGoal }}</td>
+								<td witdth="5%">{{ c.ctrGoal }}</td>
+								<td witdth="5%">{{ c.cpcGoal }}</td>
+								<td witdth="5%">{{ c.cpmGoal }}</td>
+								<td witdth="5%">{{ c.cpvGoal }}</td>
+								<td witdth="5%">{{ c.budgetMarkup }}</td>
+								<td witdth="3%">{{ c.budgetMarkupType }}</td>
+								<td witdth="5%">{{ c.impressionMarkup }}</td>
+								<td witdth="5%">{{ c.impressionMarkupType }}</td>
+								<td witdth="5%">{{ c.clickMarkup }}</td>
+								<td witdth="5%">{{ c.clickMarkupType }}</td>
+								<td witdth="5%">{{ c.videoMarkup }}</td>
+								<td witdth="5%">{{ c.videoMarkupType }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
