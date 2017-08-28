@@ -1,5 +1,0 @@
-Path Option: Cmd
-SSH Option: OpenSSH
-CRLF Option: CRLFCommitAsIs
-Bash Terminal Option: MinTTY
-Performance Tweaks FSCache: Enabled
